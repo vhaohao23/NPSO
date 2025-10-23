@@ -150,8 +150,26 @@ void standardization(vector<int> &p){
         p[i]=mp[p[i]];
 }
 
+vector<unordered_map<int, vector<int>>> cachedCommPb(N+1);
+unordered_map<int, vector<int>> cachedCommPg_global;
+bool needRebuildPg = true;
+
+void rebuildCommunityMap(const vector<int>& partition, unordered_map<int, vector<int>>& res){
+    res.clear();
+    rep(i,1,n,1){
+        res[partition[i]].push_back(i);
+    }
+}
+
 void NPSO(){
     initialization();   
+    
+    // Initial cache
+    rep(p,1,N,1){
+        rebuildCommunityMap(Pb[p], cachedCommPb[p]);
+    }
+    rebuildCommunityMap(Pg, cachedCommPg_global);
+    
     cout<<Qg<<"\n";    
     rep(i,1,n,1)
         cout<<Pg[i]<<" ";
@@ -169,13 +187,6 @@ void NPSO(){
                 V[p][i]=w*V[p][i]+c1*r1[i]*diffPb[i]+c2*r2[i]*diffPg[i];
             }
 
-            // PRE-GROUP: Nhóm nodes theo community trước
-            unordered_map<int, vector<int>> commPb, commPg;
-            rep(i,1,n,1){
-                commPb[Pb[p][i]].push_back(i);
-                commPg[Pg[i]].push_back(i);
-            }
-
             vector<vector<int>> a(n+1);
             vector<bool> dd(n+1,0);
 
@@ -190,12 +201,11 @@ void NPSO(){
 
                         vector<int>* community;
                         if (randp<r1[i]){
-                            community = &commPb[Pb[p][i]];
+                            community = &cachedCommPb[p][Pb[p][i]];
                         }else{
-                            community = &commPg[Pg[i]];
+                            community = &cachedCommPg_global[Pg[i]];
                         }
 
-                        // Connect nodes in same community
                         int lastNode = -1;
                         for (int j : *community){
                             if (!dd[j]){
@@ -220,9 +230,12 @@ void NPSO(){
             if (Q[p]>Qb[p]){
                 Pb[p]=P[p];
                 Qb[p]=Q[p];
+                rebuildCommunityMap(Pb[p], cachedCommPb[p]); 
+                
                 if (Qb[p]>Qg){
                     Qg=Qb[p];
                     Pg=Pb[p];
+                    rebuildCommunityMap(Pg, cachedCommPg_global);
                 }
             }
         }
