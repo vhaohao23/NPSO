@@ -27,6 +27,8 @@ vector<double> k;
 vector<vector<int>> dk(N+1);
 vector<vector<int>> lk(N+1);
 
+
+
 double modularity(vector<int> dk,vector<int> lk){
     double Q=0;
 
@@ -105,25 +107,33 @@ void initialization(){
     } 
 }
 
-vector<double> calDiff(vector<int> p1,vector<int>p2){
-    vector<int> cnt1(n+1,0);// count number node in each community of l1
-    vector<int> cnt2(n+1,0);// count number node in each community of l2
-    unordered_map<string,int> cntIntersection;
-    
-    string c1c2;
-    rep(i,1,n,1){
-        cnt1[p1[i]]++,cnt2[p2[i]]++;        
-        c1c2=to_string(p1[i])+","+to_string(p2[i]);
 
-        if (cntIntersection.find(c1c2)!=cntIntersection.end())
-            cntIntersection[c1c2]++;
-        else cntIntersection.insert({c1c2,1});
+unordered_map<long long, int> cntIntersection;
+
+vector<double> calDiff(const vector<int>& p1, const vector<int>& p2){
+    static vector<int> cnt1, cnt2;
+    static vector<long long> keys;
+    
+    cnt1.assign(n+1, 0);
+    cnt2.assign(n+1, 0);
+    keys.resize(n+1);
+    
+    cntIntersection.clear();
+
+    rep(i,1,n,1){
+        cnt1[p1[i]]++; 
+        cnt2[p2[i]]++;
+        keys[i] = ((long long)p1[i] << 32) | (unsigned long long)p2[i];// hash pair of label
+        cntIntersection[keys[i]]++;
     }
 
-    vector<double> res(n+1,0);
+    static vector<double> res;
+    res.assign(n+1, 0);
+    
     rep(i,1,n,1){
-        c1c2=to_string(p1[i])+","+to_string(p2[i]);
-        res[i]=double(cntIntersection[c1c2])/double(cnt1[p1[i]]+cnt2[p2[i]]-cntIntersection[c1c2]);
+        int intersection = cntIntersection[keys[i]]; 
+        res[i] = double(intersection) / 
+                 double(cnt1[p1[i]] + cnt2[p2[i]] - intersection);
     }
 
     return res;
@@ -149,9 +159,8 @@ void NPSO(){
 
     rep(t,1,T,1){
         rep(p,1,N,1){
-            uniform_real_distribution< double > dis(0.0,1.0);
+            uniform_real_distribution<double> dis(0.0,1.0);
             vector<double> r1(n+1), r2(n+1);
-
             vector<double> diffPb=calDiff(P[p],Pb[p]);
             vector<double> diffPg=calDiff(P[p],Pg);
             rep(i,1,n,1){
@@ -160,44 +169,42 @@ void NPSO(){
                 V[p][i]=w*V[p][i]+c1*r1[i]*diffPb[i]+c2*r2[i]*diffPg[i];
             }
 
+            // PRE-GROUP: Nhóm nodes theo community trước
+            unordered_map<int, vector<int>> commPb, commPg;
+            rep(i,1,n,1){
+                commPb[Pb[p][i]].push_back(i);
+                commPg[Pg[i]].push_back(i);
+            }
+
             vector<vector<int>> a(n+1);
             vector<bool> dd(n+1,0);
 
-            //make random decision
             rep(i,1,n,1)
                 if (!dd[i]){
                     double prob=1.0/(1.0+exp(-V[p][i]));
                     double randProb=dis(gen);
                     if (randProb<prob){
-                        //which means particle move to personal best or global best
-                        double sumr1r2=int(r1[i]+r2[i]);
-                        uniform_real_distribution< double > disp(0.0,sumr1r2);
+                        double sumr1r2=r1[i]+r2[i];
+                        uniform_real_distribution<double> disp(0.0,sumr1r2);
                         double randp=disp(gen);
 
-                        int lastNodeofCommunity=-1;
+                        vector<int>* community;
                         if (randp<r1[i]){
-                            rep(j,1,n,1){
-                                if (Pb[p][j]==Pb[p][i]&&!dd[j]){
-                                    // make the links between nodes in the same community
-                                    if (lastNodeofCommunity!=-1){
-                                        a[lastNodeofCommunity].push_back(j);
-                                        a[j].push_back(lastNodeofCommunity);
-                                    }
-                                    lastNodeofCommunity=j;
-                                    dd[j]=1;
-                                }
-                            }
+                            community = &commPb[Pb[p][i]];
                         }else{
-                            rep(j,1,n,1){
-                                if (Pg[j]==Pg[i]&&!dd[j]){
-                                    // make the links between nodes in the same community
-                                    if (lastNodeofCommunity!=-1){
-                                        a[lastNodeofCommunity].push_back(j);
-                                        a[j].push_back(lastNodeofCommunity);
-                                    }
-                                    lastNodeofCommunity=j;
-                                    dd[j]=1;
+                            community = &commPg[Pg[i]];
+                        }
+
+                        // Connect nodes in same community
+                        int lastNode = -1;
+                        for (int j : *community){
+                            if (!dd[j]){
+                                if (lastNode != -1){
+                                    a[lastNode].push_back(j);
+                                    a[j].push_back(lastNode);
                                 }
+                                lastNode = j;
+                                dd[j] = true;
                             }
                         }
                     }
@@ -206,7 +213,6 @@ void NPSO(){
             P[p]=decoding(a);
             caldklk(P[p],dk[p],lk[p]);
             Q[p]=modularity(dk[p],lk[p]);
-
         }
 
         // update personal best and global best
