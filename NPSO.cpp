@@ -50,24 +50,59 @@ void LAR_rand(vector<vector<int>> &a){
     }
 }
 
-vector<int> decoding(vector<vector<int>> a){
+// vector<int> decoding(vector<vector<int>> &a){
+//     bool dd[n+1]={};
+
+//     vector<int> l(n+1);
+//     int cnt=0;
+
+//     rep(i,1,n,1)
+//         if (!dd[i]){
+//             ++cnt;
+//             queue<int> q;
+//             q.push(i);
+//             while (!q.empty()){
+//                 int u=q.front();
+//                 q.pop();
+//                 l[u]=cnt;
+//                 for (int v:a[u])
+//                     if (!dd[v]){
+//                         dd[v]=true;
+//                         q.push(v);
+//                     }
+//             }
+//         }
+//     return l;
+// }
+
+
+vector<int> decoding(vector<vector<int>>& a){
     bool dd[n+1]={};
+
+    static vector<int> q; 
+    
     vector<int> l(n+1);
     int cnt=0;
 
     rep(i,1,n,1)
         if (!dd[i]){
             ++cnt;
-            queue<int> q;
-            q.push(i);
-            while (!q.empty()){
-                int u=q.front();
-                q.pop();
-                l[u]=cnt;
-                for (int v:a[u])
+            q.clear();
+            q.reserve(n); 
+            
+            int head = 0;
+            q.push_back(i);
+            dd[i] = true;
+            
+            while (head < q.size()){
+                int u = q[head++];
+                l[u] = cnt;
+                
+                const auto& neighbors = a[u];
+                for (int v : neighbors)
                     if (!dd[v]){
-                        dd[v]=true;
-                        q.push(v);
+                        dd[v] = true;
+                        q.push_back(v);
                     }
             }
         }
@@ -174,7 +209,6 @@ void NPSO(){
     rep(i,1,n,1)
         cout<<Pg[i]<<" ";
     cout<<"\n";
-
     rep(t,1,T,1){
         rep(p,1,N,1){
             uniform_real_distribution<double> dis(0.0,1.0);
@@ -187,9 +221,11 @@ void NPSO(){
                 V[p][i]=w*V[p][i]+c1*r1[i]*diffPb[i]+c2*r2[i]*diffPg[i];
             }
 
-            vector<vector<int>> a(n+1);
+            vector<vector<int>> a(n+1);// adjacency list for the proposed changes
+
             vector<bool> dd(n+1,0);
 
+            // make the change decision
             rep(i,1,n,1)
                 if (!dd[i]){
                     double prob=1.0/(1.0+exp(-V[p][i]));
@@ -201,9 +237,9 @@ void NPSO(){
 
                         vector<int>* community;
                         if (randp<r1[i]){
-                            community = &cachedCommPb[p][Pb[p][i]];
+                            community = &cachedCommPb[p][Pb[p][i]];// go to Pbest
                         }else{
-                            community = &cachedCommPg_global[Pg[i]];
+                            community = &cachedCommPg_global[Pg[i]]; // go to Gbest
                         }
 
                         int lastNode = -1;
@@ -245,6 +281,7 @@ void NPSO(){
     standardization(Pg);
     rep(i,1,n,1)
         cout<<Pg[i]<<" ";
+
 }
 
 int main(){
