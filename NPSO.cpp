@@ -2,15 +2,16 @@
 using namespace std;
 
 #define rep(i,a,b,x)  for(int i=a;i<=b;i+=x)
+#define fastIO ios_base::sync_with_stdio(false);cout.tie(NULL);cin.tie(NULL);
 
 random_device rd;   
 mt19937 gen(rd());
 
-const int N=100;
+const int N=10;
 const double c1=2,c2=2;
 const double w=0.7298;
 
-int T=100;
+int T=10;
 
 int n,m;
 vector<vector<int>> E;
@@ -176,7 +177,7 @@ vector<double> calDiff(const vector<int>& p1, const vector<int>& p2){
  
 
 void standardization(vector<int> &p){
-    map<int,int> mp;
+    unordered_map<int,int> mp;
     int cnt=0;
     rep(i,1,n,1)
         if (!mp[p[i]])
@@ -221,11 +222,10 @@ void NPSO(){
                 V[p][i]=w*V[p][i]+c1*r1[i]*diffPb[i]+c2*r2[i]*diffPg[i];
             }
 
-            vector<vector<int>> a(n+1);// adjacency list for the proposed changes
-
             vector<bool> dd(n+1,0);
 
             // make the change decision
+            int s = *max_element(P[p].begin() + 1, P[p].end());
             rep(i,1,n,1)
                 if (!dd[i]){
                     double prob=1.0/(1.0+exp(-V[p][i]));
@@ -241,22 +241,17 @@ void NPSO(){
                         }else{
                             community = &cachedCommPg_global[Pg[i]]; // go to Gbest
                         }
-
-                        int lastNode = -1;
+                        ++s;
                         for (int j : *community){
                             if (!dd[j]){
-                                if (lastNode != -1){
-                                    a[lastNode].push_back(j);
-                                    a[j].push_back(lastNode);
-                                }
-                                lastNode = j;
+                                P[p][j]=s;
                                 dd[j] = true;
                             }
                         }
                     }
                 }
 
-            P[p]=decoding(a);
+            standardization(P[p]);
             caldklk(P[p],dk[p],lk[p]);
             Q[p]=modularity(dk[p],lk[p]);
         }
@@ -285,6 +280,7 @@ void NPSO(){
 }
 
 int main(){
+    fastIO
     clock_t tStart = clock();
     
     freopen("input.txt","r",stdin);
