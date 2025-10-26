@@ -7,11 +7,11 @@ using namespace std;
 random_device rd;   
 mt19937 gen(rd());
 
-const int N=10;
+const int N=100;
 const double c1=2,c2=2;
 const double w=0.7298;
 
-int T=10;
+int T=100;
 
 int n,m;
 vector<vector<int>> E;
@@ -50,31 +50,6 @@ void LAR_rand(vector<vector<int>> &a){
         a[v].push_back(u);
     }
 }
-
-// vector<int> decoding(vector<vector<int>> &a){
-//     bool dd[n+1]={};
-
-//     vector<int> l(n+1);
-//     int cnt=0;
-
-//     rep(i,1,n,1)
-//         if (!dd[i]){
-//             ++cnt;
-//             queue<int> q;
-//             q.push(i);
-//             while (!q.empty()){
-//                 int u=q.front();
-//                 q.pop();
-//                 l[u]=cnt;
-//                 for (int v:a[u])
-//                     if (!dd[v]){
-//                         dd[v]=true;
-//                         q.push(v);
-//                     }
-//             }
-//         }
-//     return l;
-// }
 
 
 vector<int> decoding(vector<vector<int>>& a){
@@ -197,6 +172,47 @@ void rebuildCommunityMap(const vector<int>& partition, unordered_map<int, vector
     }
 }
 
+void localSearch(vector<int>& p,vector<int>& dk, vector<int>& lk){
+    rep(u,1,n,1){
+        unordered_map<int, int> commEdgeCount;
+        for (int v : E[u]){
+            commEdgeCount[p[v]]++;
+        }
+
+        int bestComm = p[u];
+        double bestDeltaQ = 0.0;
+        vector<double> bestDeltas(4,0.0);
+        for (const auto& [comm, edgeCount] : commEdgeCount){
+            if (comm == p[u]) continue;
+
+            double deltal1=-commEdgeCount[p[u]];
+            double deltal2=commEdgeCount[comm];
+            double deltad1=-k[u];
+            double deltad2=k[u];
+            double deltaQ = double(deltal1 + deltal2) / double(m)
+                            - pow(double(dk[p[u]] + deltad1), 2) / double(4*m*m)
+                            - pow(double(dk[comm] + deltad2), 2) / double(4*m*m)
+                            + pow(double(dk[p[u]]), 2) / double(4*m*m)
+                            + pow(double(dk[comm]), 2) / double(4*m*m);
+
+            if (deltaQ > bestDeltaQ){
+                bestDeltaQ = deltaQ;
+                bestDeltas = {deltal1, deltal2, deltad1, deltad2};
+                bestComm = comm;
+            }
+        }
+
+        if (bestComm != p[u]){
+            lk[p[u]] += bestDeltas[0];
+            lk[bestComm] += bestDeltas[1];
+            dk[p[u]] += bestDeltas[2];
+            dk[bestComm] += bestDeltas[3];
+
+            p[u] = bestComm;
+        }
+    }
+}
+
 void NPSO(){
     initialization();   
     
@@ -207,8 +223,8 @@ void NPSO(){
     rebuildCommunityMap(Pg, cachedCommPg_global);
     
     cout<<Qg<<"\n";    
-    rep(i,1,n,1)
-        cout<<Pg[i]<<" ";
+    // rep(i,1,n,1)
+    //     cout<<Pg[i]<<" ";
     cout<<"\n";
     rep(t,1,T,1){
         rep(p,1,N,1){
@@ -254,6 +270,9 @@ void NPSO(){
             standardization(P[p]);
             caldklk(P[p],dk[p],lk[p]);
             Q[p]=modularity(dk[p],lk[p]);
+
+            localSearch(P[p],dk[p],lk[p]);
+            Q[p]=modularity(dk[p],lk[p]);
         }
 
         // update personal best and global best
@@ -274,8 +293,8 @@ void NPSO(){
 
     cout<<Qg<<"\n";
     standardization(Pg);
-    rep(i,1,n,1)
-        cout<<Pg[i]<<" ";
+    // rep(i,1,n,1)
+    //     cout<<Pg[i]<<" ";
 
 }
 
