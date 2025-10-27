@@ -7,11 +7,11 @@ using namespace std;
 random_device rd;   
 mt19937 gen(rd());
 
-const int N=10;
+const int N=100;
 const double c1=2,c2=2;
 const double w=1.5;
 
-int T=10;
+int T;
 
 int n,m;
 vector<vector<int>> E;
@@ -237,6 +237,53 @@ void localSearch(vector<int>& p, vector<int>& dk, vector<int>& lk){
     }
 }
 
+void caculateIter(){
+    if (n+m<=1000) {T=100;return;}
+    else if (n+m>=1000000) {T=10;return;}
+    
+    double log_ratio = (double(log10(n+m)) - 3.0) / 3.0;  // 3.0 = log10(1000), 3.0 = log10(1e6) - log10(1000)
+    T = (int)(100 - 90 * log_ratio);
+}
+
+// void EPD(){
+//     if (x.size()<10) return;
+
+//     vector<pair<double, int>> modularityValues;
+//     for (int i = 1; i <= pop; i++) {
+//         double modValue = modularity(dk[i],lk[i]);  
+//         modularityValues.push_back({modValue, i});
+//     }
+
+//     sort(modularityValues.begin(), modularityValues.end());
+
+//     vector<vector<int>> sortedX(pop + 1);
+//     vector<vector<int>> sorteddk(pop + 1);
+//     vector<vector<int>> sortedlk(pop + 1); 
+//     for (int i = 0; i < pop; i++) {
+//         sortedX[i + 1] = x[modularityValues[i].second];
+//         sorteddk[i + 1] = dk[modularityValues[i].second];
+//         sortedlk[i + 1] = lk[modularityValues[i].second];
+//     }
+
+//     x=sortedX;
+//     dk=sorteddk;
+//     lk=sortedlk;
+
+//     double N_nor=pop-(pop/2+1)+1;
+//     uniform_real_distribution<double> dis(0,1);
+//     for (int i=pop/2+1;i<=pop;i++){
+//         double C=1.0-exp(-double(i)/N_nor);
+//         double rand=dis(gen);
+//         if (rand<=C){
+//             x.erase(x.begin() + i);
+//             dk.erase(dk.begin() + i);
+//             lk.erase(lk.begin() + i);   
+//             --pop;
+//         }
+//     }
+    
+// }
+
 void NPSO(){
     initialization();   
     cout<<Qg<<"\n";    
@@ -249,6 +296,9 @@ void NPSO(){
     // rep(i,1,n,1)
     //     cout<<Pg[i]<<" ";
     cout<<"\n";
+    caculateIter();
+    cout<<T<<"\n";
+
     rep(t,1,T,1){
         rep(p,1,N,1){
             uniform_real_distribution<double> dis(0.0,1.0);
