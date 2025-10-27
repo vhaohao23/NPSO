@@ -7,11 +7,11 @@ using namespace std;
 random_device rd;   
 mt19937 gen(rd());
 
-const int N=100;
+const int N=10;
 const double c1=2,c2=2;
-const double w=0.7298;
+const double w=1.5;
 
-int T=100;
+int T=10;
 
 int n,m;
 vector<vector<int>> E;
@@ -172,42 +172,66 @@ void rebuildCommunityMap(const vector<int>& partition, unordered_map<int, vector
     }
 }
 
-void localSearch(vector<int>& p,vector<int>& dk, vector<int>& lk){
+void localSearch(vector<int>& p, vector<int>& dk, vector<int>& lk){
+    static vector<int> commEdgeCount(n+1, 0);
+    static vector<int> validComms;
+    validComms.reserve(n/2); // Reserve reasonable size
+    
+    double inv_4m2 = 1.0 / double(4*m*m);
+    double inv_m = 1.0 / double(m);
+
     rep(u,1,n,1){
-        unordered_map<int, int> commEdgeCount;
+        if (E[u].empty()) continue;
+        
+        validComms.clear();
+        int oldComm = p[u];
+        
         for (int v : E[u]){
-            commEdgeCount[p[v]]++;
+            int vComm = p[v];
+            if (commEdgeCount[vComm] == 0 && vComm != oldComm) 
+                validComms.push_back(vComm);
+            commEdgeCount[vComm]++;
         }
 
-        int bestComm = p[u];
+        int bestComm = oldComm;
         double bestDeltaQ = 0.0;
-        vector<double> bestDeltas(4,0.0);
-        for (const auto& [comm, edgeCount] : commEdgeCount){
-            if (comm == p[u]) continue;
-
-            double deltal1=-commEdgeCount[p[u]];
-            double deltal2=commEdgeCount[comm];
-            double deltad1=-k[u];
-            double deltad2=k[u];
-            double deltaQ = double(deltal1 + deltal2) / double(m)
-                            - pow(double(dk[p[u]] + deltad1), 2) / double(4*m*m)
-                            - pow(double(dk[comm] + deltad2), 2) / double(4*m*m)
-                            + pow(double(dk[p[u]]), 2) / double(4*m*m)
-                            + pow(double(dk[comm]), 2) / double(4*m*m);
+        vector<double> bestDeltas(4, 0.0);
+        
+        int oldCommEdges = commEdgeCount[oldComm];
+        double ku = k[u];
+        double dk_old = dk[oldComm];//sum egree of u's old community before moving 
+        
+        for (int comm : validComms){
+            int newCommEdges = commEdgeCount[comm];
+            double deltal1 = -oldCommEdges;
+            double deltal2 = newCommEdges;
+            
+            double dk_old_new = dk_old - ku;//sum degree of u's old community after moving
+            double dk_new_old = dk[comm];//sum degree of u's new community before moving
+            double dk_new_new = dk_new_old + ku;//sum degree of u's new community after moving
+            
+            double deltaQ = (deltal1 + deltal2) * inv_m
+                - (dk_old_new * dk_old_new - dk_old * dk_old) * inv_4m2
+                - (dk_new_new * dk_new_new - dk_new_old * dk_new_old) * inv_4m2;
 
             if (deltaQ > bestDeltaQ){
                 bestDeltaQ = deltaQ;
-                bestDeltas = {deltal1, deltal2, deltad1, deltad2};
+                bestDeltas = {deltal1, deltal2, -ku, ku};
                 bestComm = comm;
             }
         }
 
-        if (bestComm != p[u]){
-            lk[p[u]] += bestDeltas[0];
-            lk[bestComm] += bestDeltas[1];
-            dk[p[u]] += bestDeltas[2];
-            dk[bestComm] += bestDeltas[3];
+        // Clear
+        validComms.push_back(oldComm);
+        for (int comm : validComms){
+            commEdgeCount[comm] = 0;
+        }
 
+        if (bestComm != oldComm){
+            lk[oldComm] += bestDeltas[0];
+            lk[bestComm] += bestDeltas[1];
+            dk[oldComm] += bestDeltas[2];
+            dk[bestComm] += bestDeltas[3];
             p[u] = bestComm;
         }
     }
@@ -215,14 +239,13 @@ void localSearch(vector<int>& p,vector<int>& dk, vector<int>& lk){
 
 void NPSO(){
     initialization();   
-    
+    cout<<Qg<<"\n";    
     // Initial cache
     rep(p,1,N,1){
         rebuildCommunityMap(Pb[p], cachedCommPb[p]);
     }
     rebuildCommunityMap(Pg, cachedCommPg_global);
     
-    cout<<Qg<<"\n";    
     // rep(i,1,n,1)
     //     cout<<Pg[i]<<" ";
     cout<<"\n";
@@ -237,7 +260,7 @@ void NPSO(){
                 r2[i]=dis(gen);
                 V[p][i]=w*V[p][i]+c1*r1[i]*diffPb[i]+c2*r2[i]*diffPg[i];
             }
-
+            // cout<<V[p][55]<<"\n";
             vector<bool> dd(n+1,0);
 
             // make the change decision
@@ -272,7 +295,7 @@ void NPSO(){
             Q[p]=modularity(dk[p],lk[p]);
 
             localSearch(P[p],dk[p],lk[p]);
-            Q[p]=modularity(dk[p],lk[p]);
+            // Q[p]=modularity(dk[p],lk[p]);
         }
 
         // update personal best and global best
@@ -289,6 +312,8 @@ void NPSO(){
                 }
             }
         }
+
+        cout<<"Iteration "<<t<<": "<<Qg<<"\n";
     }
 
     cout<<Qg<<"\n";
@@ -299,10 +324,11 @@ void NPSO(){
 }
 
 int main(){
-    fastIO
+    // fastIO
     clock_t tStart = clock();
     
     freopen("input.txt","r",stdin);
+    // freopen("output.txt","w",stdout);
 
     cin>>n>>m;
 
