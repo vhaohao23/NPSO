@@ -7,7 +7,7 @@ using namespace std;
 random_device rd;   
 mt19937 gen(rd());
 
-const int N=100;
+ int N=100;
 const double c1=2,c2=2;
 const double w=1.5;
 
@@ -245,44 +245,60 @@ void caculateIter(){
     T = (int)(100 - 90 * log_ratio);
 }
 
-// void EPD(){
-//     if (x.size()<10) return;
+void EPD(){
+    if (P.size()<5) return;
 
-//     vector<pair<double, int>> modularityValues;
-//     for (int i = 1; i <= pop; i++) {
-//         double modValue = modularity(dk[i],lk[i]);  
-//         modularityValues.push_back({modValue, i});
-//     }
+    vector<pair<double, int>> modularityValues;
+    for (int i = 1; i <= N; i++) {
+        double modValue = modularity(dk[i],lk[i]);  
+        modularityValues.push_back({modValue, i});
+    }
 
-//     sort(modularityValues.begin(), modularityValues.end());
+    sort(modularityValues.begin(), modularityValues.end());
 
-//     vector<vector<int>> sortedX(pop + 1);
-//     vector<vector<int>> sorteddk(pop + 1);
-//     vector<vector<int>> sortedlk(pop + 1); 
-//     for (int i = 0; i < pop; i++) {
-//         sortedX[i + 1] = x[modularityValues[i].second];
-//         sorteddk[i + 1] = dk[modularityValues[i].second];
-//         sortedlk[i + 1] = lk[modularityValues[i].second];
-//     }
+    vector<vector<int>> sortedP(N + 1);
+    vector<double> sortedQ(N + 1);
+    vector<vector<double>> sortedV(N + 1);
+    vector<vector<int>> sortedPb(N + 1);
+    vector<double> sortedQb(N + 1);
+    vector<vector<int>> sorteddk(N + 1);
+    vector<vector<int>> sortedlk(N + 1); 
+    for (int i = 0; i < N; i++) {
+        sortedP[i + 1] = P[modularityValues[i].second];
+        sortedQ[i + 1] = Q[modularityValues[i].second];
+        sortedV[i + 1] = V[modularityValues[i].second];
+        sortedPb[i + 1] = Pb[modularityValues[i].second];
+        sortedQb[i + 1] = Qb[modularityValues[i].second];
+        sorteddk[i + 1] = dk[modularityValues[i].second];
+        sortedlk[i + 1] = lk[modularityValues[i].second];
+    }
 
-//     x=sortedX;
-//     dk=sorteddk;
-//     lk=sortedlk;
+    P=sortedP;
+    Q=sortedQ;
+    V=sortedV;
+    Pb=sortedPb;
+    Qb=sortedQb;
+    dk=sorteddk;
+    lk=sortedlk;
 
-//     double N_nor=pop-(pop/2+1)+1;
-//     uniform_real_distribution<double> dis(0,1);
-//     for (int i=pop/2+1;i<=pop;i++){
-//         double C=1.0-exp(-double(i)/N_nor);
-//         double rand=dis(gen);
-//         if (rand<=C){
-//             x.erase(x.begin() + i);
-//             dk.erase(dk.begin() + i);
-//             lk.erase(lk.begin() + i);   
-//             --pop;
-//         }
-//     }
+    double N_nor=N-(N/2+1)+1;
+    uniform_real_distribution<double> dis(0,1);
+    for (int i=N/2+1;i<=N;i++){
+        double C=1.0-exp(-double(i)/N_nor);
+        double rand=dis(gen);
+        if (rand<=C){
+            P.erase(P.begin() + i);
+            Q.erase(Q.begin() + i);
+            V.erase(V.begin() + i);
+            Pb.erase(Pb.begin() + i);
+            Qb.erase(Qb.begin() + i);
+            dk.erase(dk.begin() + i);
+            lk.erase(lk.begin() + i);
+            --N;
+        }
+    }
     
-// }
+}
 
 void NPSO(){
     initialization();   
@@ -310,7 +326,6 @@ void NPSO(){
                 r2[i]=dis(gen);
                 V[p][i]=w*V[p][i]+c1*r1[i]*diffPb[i]+c2*r2[i]*diffPg[i];
             }
-            // cout<<V[p][55]<<"\n";
             vector<bool> dd(n+1,0);
 
             // make the change decision
@@ -343,9 +358,8 @@ void NPSO(){
             standardization(P[p]);
             caldklk(P[p],dk[p],lk[p]);
             Q[p]=modularity(dk[p],lk[p]);
-
             localSearch(P[p],dk[p],lk[p]);
-            // Q[p]=modularity(dk[p],lk[p]);
+            Q[p]=modularity(dk[p],lk[p]);
         }
 
         // update personal best and global best
@@ -363,7 +377,9 @@ void NPSO(){
             }
         }
 
-        cout<<"Iteration "<<t<<": "<<Qg<<"\n";
+        EPD();
+
+        cout<<"Iteration "<<t<<": "<<Qg<<" "<<N<<"\n";
     }
 
     cout<<Qg<<"\n";
