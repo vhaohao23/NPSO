@@ -7,26 +7,26 @@ using namespace std;
 random_device rd;   
 mt19937 gen(rd());
 
- int N=100;
-const double c1=2,c2=2;
-const double w=1.5;
+int N;
+const double c1=1,c2=1;
+const double w=1.01;
 
 int T;
 
 int n,m;
 vector<vector<int>> E;
-vector<vector<int>> P(N+1);     
-vector<vector<int>> Pb(N+1);
+vector<vector<int>> P;     
+vector<vector<int>> Pb;
 vector<int> Pg;
-vector<double> Q(N+1,0);
-vector<double> Qb(N+1,0);
+vector<double> Q;
+vector<double> Qb;
 double Qg=0;
 
 vector<vector<double>> V;
 vector<double> k;
 
-vector<vector<int>> dk(N+1);
-vector<vector<int>> lk(N+1);
+vector<vector<int>> dk;
+vector<vector<int>> lk;
 
 
 
@@ -161,7 +161,7 @@ void standardization(vector<int> &p){
         p[i]=mp[p[i]];
 }
 
-vector<unordered_map<int, vector<int>>> cachedCommPb(N+1);
+vector<unordered_map<int, vector<int>>> cachedCommPb;
 unordered_map<int, vector<int>> cachedCommPg_global;
 bool needRebuildPg = true;
 
@@ -177,7 +177,7 @@ void localSearch(vector<int>& p, vector<int>& dk, vector<int>& lk){
     static vector<int> validComms;
     validComms.reserve(n/2); // Reserve reasonable size
     
-    double inv_4m2 = 1.0 / double(4*m*m);
+    double inv_4m2 = 1.0 / (4.0 * double(m) * double(m));
     double inv_m = 1.0 / double(m);
 
     rep(u,1,n,1){
@@ -238,71 +238,106 @@ void localSearch(vector<int>& p, vector<int>& dk, vector<int>& lk){
 }
 
 void caculateIter(){
-    if (n+m<=1000) {T=100;return;}
-    else if (n+m>=1000000) {T=10;return;}
+    if (n+m<=1000) {T=100,N=100;return;}
+    else if (n+m>=1000000) {T=10,N=10;return;}
     
     double log_ratio = (double(log10(n+m)) - 3.0) / 3.0;  // 3.0 = log10(1000), 3.0 = log10(1e6) - log10(1000)
     T = (int)(100 - 90 * log_ratio);
+    N = (int)(100 - 90 * log_ratio);
 }
 
-void EPD(){
-    if (P.size()<5) return;
+void mutation(vector<int>& p, vector<int>& dk, vector<int>& lk){
+    uniform_int_distribution<int> disn(1,n);
+    int u=disn(gen);
+    
+    uniform_real_distribution<double> disType(0.0,1.0);
+    double type=disType(gen);
 
-    vector<pair<double, int>> modularityValues;
-    for (int i = 1; i <= N; i++) {
-        double modValue = modularity(dk[i],lk[i]);  
-        modularityValues.push_back({modValue, i});
+    int S= *max_element(p.begin()+1,p.end());
+    ++S;
+
+    if (type<0.5){
+        double nodeMuProb=0.5; // probability of mutating each node in the same community
+        uniform_real_distribution<double> disProb(0.0,1.0);
+        for (int i=1;i<=n;i++)
+            if (p[i]==p[u]){
+                double randProb=disProb(gen);
+                if (randProb<nodeMuProb){
+                    p[i]=S;
+                }
+            }
     }
-
-    sort(modularityValues.begin(), modularityValues.end());
-
-    vector<vector<int>> sortedP(N + 1);
-    vector<double> sortedQ(N + 1);
-    vector<vector<double>> sortedV(N + 1);
-    vector<vector<int>> sortedPb(N + 1);
-    vector<double> sortedQb(N + 1);
-    vector<vector<int>> sorteddk(N + 1);
-    vector<vector<int>> sortedlk(N + 1); 
-    for (int i = 0; i < N; i++) {
-        sortedP[i + 1] = P[modularityValues[i].second];
-        sortedQ[i + 1] = Q[modularityValues[i].second];
-        sortedV[i + 1] = V[modularityValues[i].second];
-        sortedPb[i + 1] = Pb[modularityValues[i].second];
-        sortedQb[i + 1] = Qb[modularityValues[i].second];
-        sorteddk[i + 1] = dk[modularityValues[i].second];
-        sortedlk[i + 1] = lk[modularityValues[i].second];
-    }
-
-    P=sortedP;
-    Q=sortedQ;
-    V=sortedV;
-    Pb=sortedPb;
-    Qb=sortedQb;
-    dk=sorteddk;
-    lk=sortedlk;
-
-    double N_nor=N-(N/2+1)+1;
-    uniform_real_distribution<double> dis(0,1);
-    for (int i=N/2+1;i<=N;i++){
-        double C=1.0-exp(-double(i)/N_nor);
-        double rand=dis(gen);
-        if (rand<=C){
-            P.erase(P.begin() + i);
-            Q.erase(Q.begin() + i);
-            V.erase(V.begin() + i);
-            Pb.erase(Pb.begin() + i);
-            Qb.erase(Qb.begin() + i);
-            dk.erase(dk.begin() + i);
-            lk.erase(lk.begin() + i);
-            --N;
+    else {
+        p[u]=S;
+        for (int v:E[u]){
+            if (p[v]==p[u]){
+                p[v]=S;
+            }
         }
     }
-    
+
+
 }
 
+// void EPD(){
+//     if (P.size()<5) return;
+
+//     vector<pair<double, int>> modularityValues;
+//     for (int i = 1; i <= N; i++) {
+//         double modValue = modularity(dk[i],lk[i]);  
+//         modularityValues.push_back({modValue, i});
+//     }
+
+//     sort(modularityValues.begin(), modularityValues.end());
+
+//     vector<vector<int>> sortedP(N + 1);
+//     vector<double> sortedQ(N + 1);
+//     vector<vector<double>> sortedV(N + 1);
+//     vector<vector<int>> sortedPb(N + 1);
+//     vector<double> sortedQb(N + 1);
+//     vector<vector<int>> sorteddk(N + 1);
+//     vector<vector<int>> sortedlk(N + 1); 
+//     for (int i = 0; i < N; i++) {
+//         sortedP[i + 1] = P[modularityValues[i].second];
+//         sortedQ[i + 1] = Q[modularityValues[i].second];
+//         sortedV[i + 1] = V[modularityValues[i].second];
+//         sortedPb[i + 1] = Pb[modularityValues[i].second];
+//         sortedQb[i + 1] = Qb[modularityValues[i].second];
+//         sorteddk[i + 1] = dk[modularityValues[i].second];
+//         sortedlk[i + 1] = lk[modularityValues[i].second];
+//     }
+
+//     P=sortedP;
+//     Q=sortedQ;
+//     V=sortedV;
+//     Pb=sortedPb;
+//     Qb=sortedQb;
+//     dk=sorteddk;
+//     lk=sortedlk;
+
+//     double N_nor=N-(N/2+1)+1;
+//     uniform_real_distribution<double> dis(0,1);
+//     for (int i=N/2+1;i<=N;i++){
+//         double C=1.0-exp(-double(i)/N_nor);
+//         double rand=dis(gen);
+//         if (rand<=C){
+//             P.erase(P.begin() + i);
+//             Q.erase(Q.begin() + i);
+//             V.erase(V.begin() + i);
+//             Pb.erase(Pb.begin() + i);
+//             Qb.erase(Qb.begin() + i);
+//             dk.erase(dk.begin() + i);
+//             lk.erase(lk.begin() + i);
+//             --N;
+//         }
+//     }
+    
+// }
+
+
 void NPSO(){
-    initialization();   
-    cout<<Qg<<"\n";    
+    initialization();
+    cout<<Qg<<"\n";
     // Initial cache
     rep(p,1,N,1){
         rebuildCommunityMap(Pb[p], cachedCommPb[p]);
@@ -312,9 +347,8 @@ void NPSO(){
     // rep(i,1,n,1)
     //     cout<<Pg[i]<<" ";
     cout<<"\n";
-    caculateIter();
     cout<<T<<"\n";
-
+    double muProb=0.15; // mutation probability
     rep(t,1,T,1){
         rep(p,1,N,1){
             uniform_real_distribution<double> dis(0.0,1.0);
@@ -358,6 +392,12 @@ void NPSO(){
             standardization(P[p]);
             caldklk(P[p],dk[p],lk[p]);
             Q[p]=modularity(dk[p],lk[p]);
+
+            if (dis(gen)<muProb)
+                mutation(P[p],dk[p],lk[p]);
+            standardization(P[p]);
+            caldklk(P[p],dk[p],lk[p]);
+            
             localSearch(P[p],dk[p],lk[p]);
             Q[p]=modularity(dk[p],lk[p]);
         }
@@ -377,7 +417,6 @@ void NPSO(){
             }
         }
 
-        EPD();
 
         cout<<"Iteration "<<t<<": "<<Qg<<" "<<N<<"\n";
     }
@@ -386,6 +425,7 @@ void NPSO(){
     standardization(Pg);
     // rep(i,1,n,1)
     //     cout<<Pg[i]<<" ";
+    cout<<V[1][1]<<"\n";
 
 }
 
@@ -398,9 +438,19 @@ int main(){
 
     cin>>n>>m;
 
+    caculateIter();
+
     E.resize(n+1);
     k.resize(n+1,0);  
     V.resize(N+1,vector<double>(n+1,-1));
+    P.resize(N+1);
+    Pb.resize(N+1);
+    Q.resize(N+1,0);
+    Qb.resize(N+1,0);
+    dk.resize(N+1);
+    lk.resize(N+1);
+    cachedCommPb.resize(N+1);
+
 
     int u,v;
     rep(i,1,m,1){
