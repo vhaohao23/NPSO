@@ -9,10 +9,10 @@ mt19937 gen(rd());
 
 int N;
 const double c1=1,c2=1;
-const double w=1.01;
+double w=1.01;
 
 int T;
-
+const double para_disw=1.0/400.0;
 int n,m;
 vector<vector<int>> E;
 vector<vector<int>> P;     
@@ -121,7 +121,7 @@ void initialization(){
 
 unordered_map<long long, int> cntIntersection;
 
-vector<double> calDiff(const vector<int>& p1, const vector<int>& p2){
+vector<double> callSame(const vector<int>& p1, const vector<int>& p2){
     static vector<int> cnt1, cnt2;
     static vector<long long> keys;
     
@@ -279,61 +279,96 @@ void mutation(vector<int>& p, vector<int>& dk, vector<int>& lk){
 
 }
 
-// void EPD(){
-//     if (P.size()<5) return;
 
-//     vector<pair<double, int>> modularityValues;
-//     for (int i = 1; i <= N; i++) {
-//         double modValue = modularity(dk[i],lk[i]);  
-//         modularityValues.push_back({modValue, i});
-//     }
+    void mergeCommunities(vector<int>& p, vector<int>& dk, vector<int>& lk){
+        // Build community -> nodes map
+        unordered_map<int, vector<int>> commNodes;
+        commNodes.reserve(n*2);
+        for (int i=1;i<=n;i++){
+            commNodes[p[i]].push_back(i);
+        }
 
-//     sort(modularityValues.begin(), modularityValues.end());
+        if (commNodes.size() <= 1) return;
 
-//     vector<vector<int>> sortedP(N + 1);
-//     vector<double> sortedQ(N + 1);
-//     vector<vector<double>> sortedV(N + 1);
-//     vector<vector<int>> sortedPb(N + 1);
-//     vector<double> sortedQb(N + 1);
-//     vector<vector<int>> sorteddk(N + 1);
-//     vector<vector<int>> sortedlk(N + 1); 
-//     for (int i = 0; i < N; i++) {
-//         sortedP[i + 1] = P[modularityValues[i].second];
-//         sortedQ[i + 1] = Q[modularityValues[i].second];
-//         sortedV[i + 1] = V[modularityValues[i].second];
-//         sortedPb[i + 1] = Pb[modularityValues[i].second];
-//         sortedQb[i + 1] = Qb[modularityValues[i].second];
-//         sorteddk[i + 1] = dk[modularityValues[i].second];
-//         sortedlk[i + 1] = lk[modularityValues[i].second];
-//     }
+        // Helper to build edge counts between communities (count each undirected edge once)
+        auto buildEdgeMap = [&](){
+            unordered_map<long long,int> eMap;
+            eMap.reserve(m*2);
+            for (int u = 1; u <= n; ++u){
+                for (int v : E[u]){
+                    if (u < v){
+                        int cu = p[u], cv = p[v];
+                        if (cu == cv) continue;
+                        int a = min(cu, cv), b = max(cu, cv);
+                        long long key = ( (long long)a << 32 ) | (unsigned long long)b;
+                        ++eMap[key];
+                    }
+                }
+            }
+            return eMap;
+        };
 
-//     P=sortedP;
-//     Q=sortedQ;
-//     V=sortedV;
-//     Pb=sortedPb;
-//     Qb=sortedQb;
-//     dk=sorteddk;
-//     lk=sortedlk;
+        // Greedy CNM merges while positive gain exists
+        while (true){
+            // Gather active community labels
+            vector<int> commList;
+            commList.reserve(commNodes.size());
+            for (auto &pr : commNodes){
+                if (!pr.second.empty()) commList.push_back(pr.first);
+            }
+            if (commList.size() <= 1) break;
 
-//     double N_nor=N-(N/2+1)+1;
-//     uniform_real_distribution<double> dis(0,1);
-//     for (int i=N/2+1;i<=N;i++){
-//         double C=1.0-exp(-double(i)/N_nor);
-//         double rand=dis(gen);
-//         if (rand<=C){
-//             P.erase(P.begin() + i);
-//             Q.erase(Q.begin() + i);
-//             V.erase(V.begin() + i);
-//             Pb.erase(Pb.begin() + i);
-//             Qb.erase(Qb.begin() + i);
-//             dk.erase(dk.begin() + i);
-//             lk.erase(lk.begin() + i);
-//             --N;
-//         }
-//     }
-    
-// }
+            // Build edge map between communities
+            auto eMap = buildEdgeMap();
 
+            // Find best pair to merge
+            double bestDelta = 0.0;
+            int bestA = -1, bestB = -1;
+            for (auto &entry : eMap){
+                long long key = entry.first;
+                int a = int(key >> 32);
+                int b = int(key & 0xFFFFFFFF);
+                int eij = entry.second; // number of edges between a and b
+                double delta = double(eij) / double(m) - ( double(dk[a]) * double(dk[b]) ) / (2.0 * double(m) * double(m));
+                if (delta > bestDelta){
+                    bestDelta = delta;
+                    bestA = a;
+                    bestB = b;
+                }
+            }
+
+            if (bestDelta <= 1e-12) break;
+
+            // Merge bestB into bestA
+            if (bestA == -1 || bestB == -1) break;
+            // move nodes
+            auto &vecA = commNodes[bestA];
+            auto &vecB = commNodes[bestB];
+            for (int node : vecB){
+                p[node] = bestA;
+                vecA.push_back(node);
+            }
+            vecB.clear();
+
+            // find e_ab value (edges between them)
+            long long key = ( (long long)min(bestA,bestB) << 32 ) | (unsigned long long)max(bestA,bestB);
+            int e_ab = 0;
+            auto it = eMap.find(key);
+            if (it != eMap.end()) e_ab = it->second;
+
+            // update dk and lk
+            // new internal edges = lk[a] + lk[b] + e_ab
+            lk[bestA] = lk[bestA] + lk[bestB] + e_ab;
+            dk[bestA] = dk[bestA] + dk[bestB];
+
+            // zero out merged community
+            lk[bestB] = 0;
+            dk[bestB] = 0;
+        }
+
+        // Recalculate consistent dk, lk for final partition
+        caldklk(p, dk, lk);
+    }
 
 void NPSO(){
     initialization();
@@ -349,15 +384,20 @@ void NPSO(){
     cout<<"\n";
     cout<<T<<"\n";
     double muProb=0.15; // mutation probability
+
+    double disw=para_disw*double(T);
+
     rep(t,1,T,1){
         rep(p,1,N,1){
             uniform_real_distribution<double> dis(0.0,1.0);
             vector<double> r1(n+1), r2(n+1);
-            vector<double> diffPb=calDiff(P[p],Pb[p]);
-            vector<double> diffPg=calDiff(P[p],Pg);
+            vector<double> diffPb=callSame(P[p],Pb[p]);
+            vector<double> diffPg=callSame(P[p],Pg);
             rep(i,1,n,1){
                 r1[i]=dis(gen);
                 r2[i]=dis(gen);
+                if (V[p][i]>0) w=1-disw;
+                else w=1+disw;
                 V[p][i]=w*V[p][i]+c1*r1[i]*diffPb[i]+c2*r2[i]*diffPg[i];
             }
             vector<bool> dd(n+1,0);
@@ -418,14 +458,12 @@ void NPSO(){
         }
 
 
-        cout<<"Iteration "<<t<<": "<<Qg<<" "<<N<<"\n";
+        cout<<"Iteration "<<t<<": "<<Qg<<" "<<N<<" "<<V[1][1]<<" "<<V[1][10]<<" "<<V[3][1]<<" "<<V[3][10]<<"\n";
     }
 
-    cout<<Qg<<"\n";
-    standardization(Pg);
-    // rep(i,1,n,1)
-    //     cout<<Pg[i]<<" ";
-    cout<<V[1][1]<<"\n";
+    cout<<"modularity best:"<<Qg<<"\n";
+   
+    
 
 }
 
