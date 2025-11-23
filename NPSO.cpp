@@ -3,15 +3,16 @@ using namespace std;
 
 #define rep(i,a,b,x)  for(int i=a;i<=b;i+=x)
 #define fastIO ios_base::sync_with_stdio(false);cout.tie(NULL);cin.tie(NULL);
+#include <omp.h>
 
 random_device rd;   
 mt19937 gen(rd());
 
-int N=10;
+int N=100;
 const double c1=1,c2=1;
 double w=1.01;
 
-int T=10;
+int T=100;
 const double para_disw=1.0/400.0;
 int n,m;
 vector<vector<int>> E;
@@ -257,15 +258,6 @@ void localSearch(vector<int>& p, vector<long long>& dk, vector<long long>& lk){
     }
 }
 
-void caculateIter(){
-    if (n+m<=1000) {T=100,N=100;return;}
-    else if (n+m>=1000000) {T=10,N=10;return;}
-    
-    double log_ratio = (double(log10(n+m)) - 3.0) / 3.0;  // 3.0 = log10(1000), 3.0 = log10(1e6) - log10(1000)
-    T = (int)(100 - 90 * log_ratio);
-    N = (int)(100 - 90 * log_ratio);
-}
-
 void mutation(vector<int>& p, vector<long long>& dk, vector<long long>& lk){
     uniform_int_distribution<int> disn(1,n);
     int u=disn(gen);
@@ -300,136 +292,67 @@ void mutation(vector<int>& p, vector<long long>& dk, vector<long long>& lk){
 }
 
 
-void mergeCommunities(vector<int>& p, vector<long long>& dk, vector<long long>& lk){
-    double inv_2m = 1.0 / (2.0 * double(m));
-    double inv_4m2 = 1.0 / (4.0 * double(m) * double(m));
+void consolidation(vector<int> &l, int l1, int l2){
+    for (int i = 1; i <= n; i++)
+        if (l[i] == l1)
+            l[i] = l2;
+}
+
+void SecondaryCommunityConsolidation(vector<int> &l, vector<long long> &dk, vector<long long> &lk){
+    map<int, bool> mp;
+    map<int, int> cntNode;
+    int numC = 0;
     
-    // Build adjacency between communities
-    map<pair<int,int>, int> e_ij; // edges between different communities
-    set<int> activeCommunities;
-    
-    for (int u = 1; u <= n; u++) {
-        activeCommunities.insert(p[u]);
-        for (int v : E[u]) {
-            if (u < v && p[u] != p[v]) {
-                int ci = p[u], cj = p[v];
-                if (ci > cj) swap(ci, cj);
-                e_ij[{ci, cj}]++;
-            }
+    for (int i = 1; i <= n; i++){
+        if (mp.find(l[i]) == mp.end()){
+            ++numC;
+            mp[l[i]] = true;
         }
+        cntNode[l[i]]++;
     }
+
+    vector<pair<int, int>> decCommunities;
+    for (auto [x, _] : mp)
+        decCommunities.push_back({x, cntNode[x]});
     
-    // Priority queue for best merges
-    priority_queue<tuple<double, int, int>> pq; // (deltaQ, c1, c2)
+    sort(decCommunities.begin(), decCommunities.end(), [](pair<int,int> a, pair<int,int> b){
+        return a.second > b.second;
+    });
+
+    int i = numC - 1;
+    vector<int> xtmp;
+    vector<long long> dktmp, lktmp;
     
-    // Calculate initial deltaQ for all community pairs
-    for (auto& [pair_comm, eij] : e_ij) {
-        int ci = pair_comm.first;
-        int cj = pair_comm.second;
+    while (i > 0){
+        int j = 0;
+        bool check = false;
         
-        double eij_norm = double(eij) * inv_2m;
-        double ai = double(dk[ci]) * inv_2m;
-        double aj = double(dk[cj]) * inv_2m;
-        
-        double deltaQ = 2.0 * (eij_norm - ai * aj);
-        
-        if (deltaQ > 0) {
-            pq.push({deltaQ, ci, cj});
+        while (i > j){
+            xtmp = l;
+            dktmp = dk;
+            lktmp = lk;
+            
+            consolidation(l, decCommunities[i].first, decCommunities[j].first);
+            caldklk(l, dk, lk);
+            
+            double Q_new = modularity(dk, lk);
+            double Q_old = modularity(dktmp, lktmp);
+            
+            if (Q_new > Q_old){
+                --i;
+                check = true;
+                break;
+            }
+            else {
+                l = xtmp;
+                dk = dktmp;
+                lk = lktmp;
+            }
+            ++j;
         }
+
+        if (!check) --i;
     }
-    
-    // Greedy merging
-    while (!pq.empty()) {
-        auto [deltaQ, ci, cj] = pq.top();
-        pq.pop();
-        
-        // Check if communities still exist
-        if (activeCommunities.find(ci) == activeCommunities.end() || 
-            activeCommunities.find(cj) == activeCommunities.end()) {
-            continue;
-        }
-        
-        // Check if this merge is still valid (deltaQ might be outdated)
-        auto it = e_ij.find({min(ci,cj), max(ci,cj)});
-        if (it == e_ij.end()) continue;
-        
-        int eij = it->second;
-        double eij_norm = double(eij) * inv_2m;
-        double ai = double(dk[ci]) * inv_2m;
-        double aj = double(dk[cj]) * inv_2m;
-        double current_deltaQ = 2.0 * (eij_norm - ai * aj);
-        
-        // If deltaQ changed significantly, skip (outdated)
-        if (abs(current_deltaQ - deltaQ) > 1e-9 || current_deltaQ <= 0) {
-            continue;
-        }
-        
-        // Perform merge: merge cj into ci
-        for (int u = 1; u <= n; u++) {
-            if (p[u] == cj) {
-                p[u] = ci;
-            }
-        }
-        
-        // Update dk and lk
-        dk[ci] += dk[cj];
-        lk[ci] += lk[cj] + eij;
-        dk[cj] = 0;
-        lk[cj] = 0;
-        
-        activeCommunities.erase(cj);
-        
-        // Update e_ij: merge all edges from cj to ci
-        vector<pair<int,int>> toRemove;
-        vector<tuple<int,int,int>> toAdd; // (other_comm, ci, new_eij)
-        
-        for (auto it = e_ij.begin(); it != e_ij.end(); ) {
-            auto [pair_comm, eij_val] = *it;
-            int c1 = pair_comm.first;
-            int c2 = pair_comm.second;
-            
-            if (c1 == cj || c2 == cj) {
-                int other = (c1 == cj) ? c2 : c1;
-                if (other != ci) {
-                    int new_c1 = min(ci, other);
-                    int new_c2 = max(ci, other);
-                    
-                    auto it2 = e_ij.find({new_c1, new_c2});
-                    if (it2 != e_ij.end()) {
-                        it2->second += eij_val;
-                        toAdd.push_back({other, it2->second, 1}); // flag=1: update
-                    } else {
-                        toAdd.push_back({other, eij_val, 0}); // flag=0: new
-                    }
-                }
-                it = e_ij.erase(it);
-            } else {
-                ++it;
-            }
-        }
-        
-        // Add new pairs and recalculate deltaQ
-        for (auto [other, new_eij, flag] : toAdd) {
-            if (flag == 0) {
-                int new_c1 = min(ci, other);
-                int new_c2 = max(ci, other);
-                e_ij[{new_c1, new_c2}] = new_eij;
-            }
-            
-            double eij_new = double(new_eij) * inv_2m;
-            double ai_new = double(dk[ci]) * inv_2m;
-            double ao = double(dk[other]) * inv_2m;
-            
-            double new_deltaQ = 2.0 * (eij_new - ai_new * ao);
-            
-            if (new_deltaQ > 0) {
-                pq.push({new_deltaQ, min(ci, other), max(ci, other)});
-            }
-        }
-    }
-    
-    // Standardize community labels
-    standardization(p);
 }
 
 void NPSO(){
@@ -536,29 +459,38 @@ void NPSO(){
     caldklk(Pg, dkPg, lkPg);
     Qg = modularity(dkPg, lkPg);
     
+    #pragma omp parallel for schedule(dynamic)
     rep(i,1,N,1){
-        mergeCommunities(P[i], dk[i], lk[i]);
+        SecondaryCommunityConsolidation(P[i], dk[i], lk[i]);
+        
         caldklk(P[i], dk[i], lk[i]);
         Q[i] = modularity(dk[i], lk[i]);
-        cout<<"Final merge individual "<<i<<": "<<Q[i]<<"\n";
+        
+        #pragma omp critical
+        {
+            cout<<"Final merge individual "<<i<<": "<<Q[i]<<"\n";
+        }
 
-        mergeCommunities(Pb[i], dkPb[i], lkPb[i]);
+        SecondaryCommunityConsolidation(Pb[i], dkPb[i], lkPb[i]);
         caldklk(Pb[i], dkPb[i], lkPb[i]);
         Qb[i] = modularity(dkPb[i], lkPb[i]);
-        cout<<"Final merge individual "<<i<<": "<<Qb[i]<<"\n";
+        
+        #pragma omp critical
+        {
+            cout<<"Final merge individual "<<i<<": "<<Qb[i]<<"\n";
+        }
     }
 
-    mergeCommunities(Pg, dkPg, lkPg);
+    SecondaryCommunityConsolidation(Pg, dkPg, lkPg);
     caldklk(Pg, dkPg, lkPg);
     Qg = modularity(dkPg, lkPg);
     cout<<"Final merge global best: "<<Qg<<"\n";
 
-    double ans=0;
+    double ans=Qg;
     rep(i,1,N,1){
         ans=max(ans,Q[i]);
         ans=max(ans,Qb[i]);
     }
-    ans=max(ans,Qg);
 
     cout<<"modularity best:"<<ans<<"\n";
 }
@@ -567,12 +499,11 @@ int main(){
     // fastIO
     clock_t tStart = clock();
     
-    freopen("/home/vhaohao/hao/nckh/dataset-community/amazon.txt","r",stdin);
+    freopen("/home/vhaohao/hao/nckh/dataset-community/dolphins.txt","r",stdin);
     // freopen("output.txt","w",stdout);
 
     cin>>n>>m;
 
-    caculateIter();
 
     E.resize(n+1);
     k.resize(n+1,0);  
