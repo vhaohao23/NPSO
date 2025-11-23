@@ -36,7 +36,7 @@ double calI(vector<int> l1,vector<int> l2){
     vector<vector<int>> c1 (s1+1);
     vector<vector<int>> c2(s2+1);
 
-    for (int i=1;i<=N;i++)
+    for (int i=1;i<=n;i++)
         c1[l1[i]].push_back(i),c2[l2[i]].push_back(i);
 
     double I=0;
@@ -47,8 +47,8 @@ double calI(vector<int> l1,vector<int> l2){
             
             double Cij=0;
             for (int v:c1[i]) if (l2[v]==j) Cij++;
-            if (Cij>0)
-                I+=Cij*log( Cij*double(N)/double(c1[i].size()*c2[j].size()) );
+            if (Cij>0&& c1[i].size() && c2[j].size())
+                I+=Cij*log( Cij*double(n)/double(c1[i].size()*c2[j].size()) );
         }
     }
 
@@ -57,12 +57,12 @@ double calI(vector<int> l1,vector<int> l2){
 double calH(vector<int> l){
     int s=*max_element(l.begin(), l.end());
     vector<vector<int>> c(s+1);
-    for (int i=1;i<=N;i++)
+    for (int i=1;i<=n;i++)
         c[l[i]].push_back(i);
     double H=0;
     for (int i=1;i<=s;i++){
         if (c[i].size())
-            H+=double(c[i].size()*log(double(c[i].size())/double(N)));
+            H+=double(c[i].size()*log(double(c[i].size())/double(n)));
     }
     return H;
 }
@@ -532,8 +532,10 @@ void NPSO(){
     double muProb=0.15; // mutation probability
 
     double disw=para_disw*double(T);
-
+    int cntStable=0;
     rep(t,1,T,1){
+        ++cntStable;
+        if (cntStable>5) break;
         rep(p,1,N,1){
             uniform_real_distribution<double> dis(0.0,1.0);
             vector<double> r1(n+1), r2(n+1);
@@ -599,6 +601,7 @@ void NPSO(){
                     Qg=Qb[p];
                     Pg=Pb[p];
                     rebuildCommunityMap(Pg, cachedCommPg_global);
+                    cntStable = 0; // reset stable counter on improvement
                 }
             }
         }
@@ -621,18 +624,18 @@ void NPSO(){
     Qg = NMI(Pg, trueLabel);
     
     rep(i,1,N,1){
-        SecondaryCommunityConsolidation(P[i]);
+        // SecondaryCommunityConsolidation(P[i]);
         caldklk(P[i], dk[i], lk[i]);
         Q[i] = NMI(P[i], trueLabel);
         cout<<"Final merge individual "<<i<<": "<<Q[i]<<"\n";
 
-        SecondaryCommunityConsolidation(Pb[i]);
+        // SecondaryCommunityConsolidation(Pb[i]);
         caldklk(Pb[i], dkPb[i], lkPb[i]);
         Qb[i] = NMI(Pb[i], trueLabel);
         cout<<"Final merge individual "<<i<<": "<<Qb[i]<<"\n";
     }
 
-    SecondaryCommunityConsolidation(Pg);
+    // SecondaryCommunityConsolidation(Pg);
     caldklk(Pg, dkPg, lkPg);
     Qg = NMI(Pg, trueLabel);
     cout<<"Final merge global best: "<<Qg<<"\n";
@@ -642,15 +645,13 @@ void NPSO(){
         ans=max(ans,Q[i]);
         ans=max(ans,Qb[i]);
     }
-
-    cout<<"modularity best:"<<ans<<"\n";
 }
 
 int main(){
     // fastIO
     clock_t tStart = clock();
     
-    freopen("/home/vhaohao/hao/nckh/dataset-community/GN/GN-1.00/network.dat","r",stdin);
+    freopen("/home/vhaohao/hao/nckh/dataset-community/testgn/network.dat","r",stdin);
     // freopen("output.txt","w",stdout);
 
     cin>>n>>m;
@@ -677,13 +678,38 @@ int main(){
         k[u]++,k[v]++;
     }
 
-    freopen("/home/vhaohao/hao/nckh/dataset-community/GN/GN-1.00/community.dat","r",stdin);
-    trueLabel.push_back(0);
-    for (int i=1;i<=n;i++){
-        int node,label;
-        cin>>node>>label;
-        trueLabel.push_back(label+1);
+    {
+    std::string path = "/home/vhaohao/hao/nckh/dataset-community/testgn/community.dat";
+    std::ifstream fin(path);
+    if (!fin.is_open()){
+        perror(path.c_str());
+        exit(1);
     }
+
+    // ensure size and direct indexing
+    trueLabel.assign(n+1, 0);
+
+    // Two common formats:
+    // 1) lines: "<node> <label>"
+    for (int i = 0; i < n; ++i) {
+        int node, label;
+        if (!(fin >> node >> label)) {
+            std::cerr << "Read error or EOF at line " << i+1 << "\n";
+            break;
+        }
+
+        trueLabel[node+1] = label+1; // keep your +1 if desired
+        cout<<node+1<<":"<<trueLabel[node+1]<<"\n";
+    }
+    fin.close();
+    }
+
+
+    // cout << "True labels: ";
+    // for (int i = 1; i <= n; i++) {
+    //     cout << i<<":"<<trueLabel[i] << " \n";
+    // }
+    // cout << "\n";
 
 
     NPSO();
