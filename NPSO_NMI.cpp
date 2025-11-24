@@ -654,7 +654,7 @@ int main(){
     // fastIO
     clock_t tStart = clock();
     
-    freopen("/home/vhaohao/hao/nckh/dataset-community/GN/GN-0.05/network.dat","r",stdin);
+    freopen("c:\\Users\\HP\\Downloads\\synthetic networks-20251125T004928Z-1-001\\synthetic networks\\GN\\GN-0.85\\network.dat","r",stdin);
     // freopen("output.txt","w",stdout);
 
     cin>>n>>m;
@@ -682,7 +682,7 @@ int main(){
     }
 
     {
-    std::string path = "/home/vhaohao/hao/nckh/dataset-community/GN/GN-0.05/community.dat";
+    std::string path = "c:\\Users\\HP\\Downloads\\synthetic networks-20251125T004928Z-1-001\\synthetic networks\\GN\\GN-0.85\\community.dat";
     std::ifstream fin(path);
     if (!fin.is_open()){
         perror(path.c_str());
