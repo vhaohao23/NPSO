@@ -1,4 +1,6 @@
 #include<bits/stdc++.h>
+#include <omp.h>
+
 using namespace std;
 
 #define rep(i,a,b,x)  for(int i=a;i<=b;i+=x)
@@ -7,11 +9,11 @@ using namespace std;
 random_device rd;   
 mt19937 gen(rd());
 
-int N=100;
+int N=1;
 const double c1=1,c2=1;
 double w=1.01;
 
-int T=100;
+int T=1;
 const double para_disw=1.0/400.0;
 int n,m;
 vector<vector<int>> E;
@@ -133,8 +135,8 @@ void initialization(){
         vector<vector<int>> a(n+1);
         LAR_rand(a);
         P[i]=decoding(a);
-        dk[i].resize(n+1,0);
-        lk[i].resize(n+1,0);
+        dk[i].resize(n+5,0);
+        lk[i].resize(n+5,0);
         caldklk(P[i],dk[i],lk[i]);
 
         Q[i]=NMI(P[i], trueLabel);
@@ -319,8 +321,9 @@ void mutation(vector<int>& p, vector<long long>& dk, vector<long long>& lk){
 
 
 void mergeCommunities(vector<int>& p, vector<long long>& dk, vector<long long>& lk){
-    // Build adjacency between communities
-    map<pair<int,int>, int> e_ij; // edges between different communities
+    // 1. Build adjacency between communities
+    // e_ij stores edges between community u and community v
+    map<pair<int,int>, int> e_ij; 
     set<int> activeCommunities;
     
     for (int u = 1; u <= n; u++) {
@@ -334,82 +337,64 @@ void mergeCommunities(vector<int>& p, vector<long long>& dk, vector<long long>& 
         }
     }
     
-    // Priority queue for best merges based on NMI improvement
-    priority_queue<tuple<double, int, int>> pq; // (deltaNMI, c1, c2)
-    
-    // Calculate initial deltaNMI for all community pairs
-    for (auto& [pair_comm, eij] : e_ij) {
-        int ci = pair_comm.first;
-        int cj = pair_comm.second;
-        
-        // Calculate NMI improvement if we merge ci and cj
-        // We need to simulate the merge and check if NMI improves
-        vector<int> p_test = p;
-        
-        // Merge cj into ci in test partition
-        for (int u = 1; u <= n; u++) {
-            if (p_test[u] == cj) {
-                p_test[u] = ci;
+    // 2. Greedy Merging Loop based on NMI
+    while (true) {
+        double currentNMI = NMI(p, trueLabel);
+        double maxNMI = currentNMI;
+        int bestCi = -1, bestCj = -1;
+
+        // Iterate through all connected community pairs to find the best merge
+        for (auto& [pair_comm, val] : e_ij) {
+            int ci = pair_comm.first;
+            int cj = pair_comm.second;
+
+            // --- SIMULATE MERGE ---
+            // Create a temporary partition to test the NMI
+            vector<int> p_test = p;
+            for (int u = 1; u <= n; u++) {
+                if (p_test[u] == cj) {
+                    p_test[u] = ci;
+                }
+            }
+
+            // Calculate NMI for this potential merge
+            double testNMI = NMI(p_test, trueLabel);
+
+            // Check if this merge improves NMI
+            if (testNMI > maxNMI + 1e-9) { // Use epsilon for float comparison
+                maxNMI = testNMI;
+                bestCi = ci;
+                bestCj = cj;
             }
         }
-        
-        double currentNMI = NMI(p, trueLabel);
-        double testNMI = NMI(p_test, trueLabel);
-        double deltaNMI = testNMI - currentNMI;
-        
-        if (deltaNMI > 0) {
-            pq.push({deltaNMI, ci, cj});
+
+        // 3. If no merge improves NMI, break the loop
+        if (bestCi == -1) {
+            break;
         }
-    }
-    
-    // Greedy merging
-    while (!pq.empty()) {
-        auto [deltaNMI, ci, cj] = pq.top();
-        pq.pop();
-        
-        // Check if communities still exist
-        if (activeCommunities.find(ci) == activeCommunities.end() || 
-            activeCommunities.find(cj) == activeCommunities.end()) {
-            continue;
-        }
-        
-        // Verify the merge still improves NMI (since previous merges may have changed things)
-        vector<int> p_test = p;
-        for (int u = 1; u <= n; u++) {
-            if (p_test[u] == cj) {
-                p_test[u] = ci;
-            }
-        }
-        
-        double currentNMI = NMI(p, trueLabel);
-        double testNMI = NMI(p_test, trueLabel);
-        double current_deltaNMI = testNMI - currentNMI;
-        
-        // If deltaNMI is no longer positive, skip this merge
-        if (current_deltaNMI <= 1e-9) {
-            continue;
-        }
-        
-        // Perform merge: merge cj into ci
+
+        // 4. COMMIT THE BEST MERGE
+        int ci = bestCi;
+        int cj = bestCj;
+
+        // Update partition vector p
         for (int u = 1; u <= n; u++) {
             if (p[u] == cj) {
                 p[u] = ci;
             }
         }
-        
-        // Update dk and lk
-        auto it = e_ij.find({min(ci,cj), max(ci,cj)});
-        int eij_val = (it != e_ij.end()) ? it->second : 0;
-        
+
+        // Update dk and lk (Maintained for consistency, though NMI doesn't use them directly)
+        int edges_between = e_ij[{min(ci,cj), max(ci,cj)}];
         dk[ci] += dk[cj];
-        lk[ci] += lk[cj] + eij_val;
+        lk[ci] += lk[cj] + edges_between;
         dk[cj] = 0;
         lk[cj] = 0;
         
         activeCommunities.erase(cj);
         
-        // Update e_ij: merge all edges from cj to ci
-        vector<tuple<int,int,int>> toAdd; // (other_comm, new_eij, flag)
+        // Update e_ij: Move all edges connected to cj over to ci
+        vector<tuple<int,int,int>> toAdd; // (other_comm, eij_val, flag)
         
         for (auto it = e_ij.begin(); it != e_ij.end(); ) {
             auto [pair_comm, eij_val] = *it;
@@ -418,47 +403,36 @@ void mergeCommunities(vector<int>& p, vector<long long>& dk, vector<long long>& 
             
             if (c1 == cj || c2 == cj) {
                 int other = (c1 == cj) ? c2 : c1;
+                // If the other community is not the one we merged into (ci)
                 if (other != ci) {
                     int new_c1 = min(ci, other);
                     int new_c2 = max(ci, other);
                     
+                    // Check if edge already exists between ci and other
                     auto it2 = e_ij.find({new_c1, new_c2});
                     if (it2 != e_ij.end()) {
+                        // Mark to update existing edge
                         it2->second += eij_val;
-                        toAdd.push_back({other, it2->second, 1}); // flag=1: update
+                        // We don't need to add to toAdd list because we updated in place, 
+                        // but strictly speaking, we just need to ensure the map is consistent.
+                        // The original logic separated this to avoid iterator invalidation issues.
                     } else {
-                        toAdd.push_back({other, eij_val, 0}); // flag=0: new
+                        // Mark to create new edge
+                        toAdd.push_back({other, eij_val, 0}); 
                     }
                 }
+                // Remove the old edge connected to cj
                 it = e_ij.erase(it);
             } else {
                 ++it;
             }
         }
         
-        // Add new pairs and recalculate deltaNMI
-        for (auto [other, new_eij, flag] : toAdd) {
-            if (flag == 0) {
-                int new_c1 = min(ci, other);
-                int new_c2 = max(ci, other);
-                e_ij[{new_c1, new_c2}] = new_eij;
-            }
-            
-            // Test merge between ci and other
-            vector<int> p_test = p;
-            for (int u = 1; u <= n; u++) {
-                if (p_test[u] == other) {
-                    p_test[u] = ci;
-                }
-            }
-            
-            double currentNMI = NMI(p, trueLabel);
-            double testNMI = NMI(p_test, trueLabel);
-            double new_deltaNMI = testNMI - currentNMI;
-            
-            if (new_deltaNMI > 0) {
-                pq.push({new_deltaNMI, min(ci, other), max(ci, other)});
-            }
+        // Add the new edges to the map
+        for (auto [other, val, flag] : toAdd) {
+             int new_c1 = min(ci, other);
+             int new_c2 = max(ci, other);
+             e_ij[{new_c1, new_c2}] = val;
         }
     }
     
@@ -518,7 +492,7 @@ void SecondaryCommunityConsolidation(vector<int> &l){
 
 void NPSO(){
     initialization();
-    cout<<Qg<<"\n";
+    // cout<<Qg<<"\n";
     // Initial cache
     rep(p,1,N,1){
         rebuildCommunityMap(Pb[p], cachedCommPb[p]);
@@ -527,15 +501,13 @@ void NPSO(){
     
     // rep(i,1,n,1)
     //     cout<<Pg[i]<<" ";
-    cout<<"\n";
-    cout<<T<<"\n";
+    // cout<<"\n";
+    // cout<<T<<"\n";
     double muProb=0.15; // mutation probability
 
     double disw=para_disw*double(T);
     int cntStable=0;
     rep(t,1,T,1){
-        ++cntStable;
-        if (cntStable>5) break;
         rep(p,1,N,1){
             uniform_real_distribution<double> dis(0.0,1.0);
             vector<double> r1(n+1), r2(n+1);
@@ -606,52 +578,83 @@ void NPSO(){
             }
         }
 
+        ++cntStable;
+        if (cntStable>5){
+            rep(i,1,N,1){
+                SecondaryCommunityConsolidation(P[i]);
+                Q[i] = NMI(P[i], trueLabel);
 
-        cout<<"Iteration "<<t<<": "<<Qg<<" "<<N<<" "<<V[1][1]<<" "<<V[1][10]<<" "<<V[3][1]<<" "<<V[3][10]<<"\n";
+                SecondaryCommunityConsolidation(Pb[i]);
+                Qb[i] = NMI(Pb[i], trueLabel);
+            }
+            SecondaryCommunityConsolidation(Pg);
+            Qg = NMI(Pg, trueLabel);
+            
+            rep(p,1,N,1){
+                if (Q[p]>Qb[p]){
+                    Pb[p]=P[p];
+                    Qb[p]=Q[p];
+                    rebuildCommunityMap(Pb[p], cachedCommPb[p]); 
+                    
+                    if (Qb[p]>Qg){
+                        Qg=Qb[p];
+                        Pg=Pb[p];
+                        rebuildCommunityMap(Pg, cachedCommPg_global);
+                        cntStable = 0; // reset stable counter on improvement
+                    }
+                }
+            }
+            break;
+        }
+        // cout<<"Iteration "<<t<<": "<<Qg<<" "<<N<<" "<<V[1][1]<<" "<<V[1][10]<<" "<<V[3][1]<<" "<<V[3][10]<<"\n";
     }
 
     // build dk, lk for Pb and Pg before final merging 
     vector<vector<long long>> dkPb(N+1, vector<long long>(n+1, 0));
     vector<vector<long long>> lkPb(N+1, vector<long long>(n+1, 0));
     for (int i = 1; i <= N; ++i) {
-        caldklk(Pb[i], dkPb[i], lkPb[i]);
+        // caldklk(Pb[i], dkPb[i], lkPb[i]);
         Qb[i] = NMI(Pb[i], trueLabel);
     }
 
     // global best dk/lk
     vector<long long> dkPg(n+1, 0), lkPg(n+1, 0);
-    caldklk(Pg, dkPg, lkPg);
+    // caldklk(Pg, dkPg, lkPg);
     Qg = NMI(Pg, trueLabel);
-    
+    int s;
     rep(i,1,N,1){
-        // SecondaryCommunityConsolidation(P[i]);
-        caldklk(P[i], dk[i], lk[i]);
+        SecondaryCommunityConsolidation(P[i]);
+        // caldklk(P[i], dk[i], lk[i]);
         Q[i] = NMI(P[i], trueLabel);
-        cout<<"Final merge individual "<<i<<": "<<Q[i]<<"\n";
+        s=*max_element(P[i].begin()+1,P[i].end());
+        // cout<<"Final merge individual "<<i<<": "<<Q[i]<<" "<<s<<"\n";
 
-        // SecondaryCommunityConsolidation(Pb[i]);
-        caldklk(Pb[i], dkPb[i], lkPb[i]);
+        SecondaryCommunityConsolidation(Pb[i]);
+        // caldklk(Pb[i], dkPb[i], lkPb[i]);
         Qb[i] = NMI(Pb[i], trueLabel);
-        cout<<"Final merge individual "<<i<<": "<<Qb[i]<<"\n";
+        s=*max_element(Pb[i].begin()+1,Pb[i].end());
+        // cout<<"Final merge individual "<<i<<": "<<Qb[i]<<" "<<s<<"\n";
     }
 
-    // SecondaryCommunityConsolidation(Pg);
-    caldklk(Pg, dkPg, lkPg);
+    SecondaryCommunityConsolidation(Pg);
+    // caldklk(Pg, dkPg, lkPg);
     Qg = NMI(Pg, trueLabel);
-    cout<<"Final merge global best: "<<Qg<<"\n";
+    s=*max_element(Pg.begin()+1,Pg.end());
+    // cout<<"Final merge global best: "<<Qg<<" "<<s<<"\n";
 
     double ans=Qg;
     rep(i,1,N,1){
         ans=max(ans,Q[i]);
         ans=max(ans,Qb[i]);
     }
+    cout<<"Final NMI: "<<ans<<"\n";
 }
 
 int main(){
     // fastIO
     clock_t tStart = clock();
     
-    freopen("/home/vhaohao/hao/nckh/dataset-community/testgn/network.dat","r",stdin);
+    freopen("/home/vhaohao/hao/nckh/dataset-community/GN/GN-0.05/network.dat","r",stdin);
     // freopen("output.txt","w",stdout);
 
     cin>>n>>m;
@@ -679,7 +682,7 @@ int main(){
     }
 
     {
-    std::string path = "/home/vhaohao/hao/nckh/dataset-community/testgn/community.dat";
+    std::string path = "/home/vhaohao/hao/nckh/dataset-community/GN/GN-0.05/community.dat";
     std::ifstream fin(path);
     if (!fin.is_open()){
         perror(path.c_str());
@@ -699,7 +702,7 @@ int main(){
         }
 
         trueLabel[node+1] = label+1; // keep your +1 if desired
-        cout<<node+1<<":"<<trueLabel[node+1]<<"\n";
+        // cout<<node+1<<":"<<trueLabel[node+1]<<"\n";
     }
     fin.close();
     }
@@ -714,5 +717,5 @@ int main(){
 
     NPSO();
         
-    printf("\nTime taken: %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
+    // printf("\nTime taken: %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 }

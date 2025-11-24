@@ -43,3 +43,20 @@ Thumbs.db
 build/
 bin/
 obj/
+
+# Ignore tất cả file không có extension
+*
+!/**/
+!*.*
+
+# Hoặc đơn giản hơn, ignore file có quyền execute
+*.out
+*.o
+*.so
+*.a
+
+# Ignore các file build phổ biến
+build/
+bin/
+obj/
+*.exe

@@ -499,7 +499,7 @@ int main(){
     // fastIO
     clock_t tStart = clock();
     
-    freopen("/home/vhaohao/hao/nckh/dataset-community/dolphins.txt","r",stdin);
+    freopen("/home/vhaohao/hao/nckh/dataset-community/Netscience.txt","r",stdin);
     // freopen("output.txt","w",stdout);
 
     cin>>n>>m;
