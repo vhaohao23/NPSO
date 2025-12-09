@@ -9,11 +9,11 @@ using namespace std;
 random_device rd;   
 mt19937 gen(rd());
 
-int N=1;
+int N=100;
 const double c1=1,c2=1;
 double w=1.01;
 
-int T=1;
+int T=100;
 const double para_disw=1.0/400.0;
 int n,m;
 vector<vector<int>> E;
@@ -654,7 +654,7 @@ int main(){
     // fastIO
     clock_t tStart = clock();
     
-    freopen("c:\\Users\\HP\\Downloads\\synthetic networks-20251125T004928Z-1-001\\synthetic networks\\GN\\GN-0.85\\network.dat","r",stdin);
+    freopen("/home/vhaohao/hao/nckh/dataset-community/polbooks.txt","r",stdin);
     // freopen("output.txt","w",stdout);
 
     cin>>n>>m;
@@ -675,14 +675,14 @@ int main(){
     int u,v;
     rep(i,1,m,1){
         cin>>u>>v;
-        u++; v++;
+        // u++; v++;
         E[u].push_back(v);
         E[v].push_back(u);
         k[u]++,k[v]++;
     }
 
     {
-    std::string path = "c:\\Users\\HP\\Downloads\\synthetic networks-20251125T004928Z-1-001\\synthetic networks\\GN\\GN-0.85\\community.dat";
+    std::string path = "/home/vhaohao/Downloads/real-world networks with lable-20251125T082334Z-1-001/real-world networks with lable/polbooks/community.dat";
     std::ifstream fin(path);
     if (!fin.is_open()){
         perror(path.c_str());
@@ -701,7 +701,7 @@ int main(){
             break;
         }
 
-        trueLabel[node+1] = label+1; // keep your +1 if desired
+        trueLabel[node] = label; // keep your +1 if desired
         // cout<<node+1<<":"<<trueLabel[node+1]<<"\n";
     }
     fin.close();

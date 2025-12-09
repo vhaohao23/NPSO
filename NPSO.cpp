@@ -357,7 +357,6 @@ void SecondaryCommunityConsolidation(vector<int> &l, vector<long long> &dk, vect
 
 void NPSO(){
     initialization();
-    cout<<Qg<<"\n";
     // Initial cache
     rep(p,1,N,1){
         rebuildCommunityMap(Pb[p], cachedCommPb[p]);
@@ -366,14 +365,12 @@ void NPSO(){
     
     // rep(i,1,n,1)
     //     cout<<Pg[i]<<" ";
-    cout<<"\n";
-    cout<<T<<"\n";
     double muProb=0.15; // mutation probability
 
-    double disw=para_disw*double(T);
+    double disw=1.1;
 
     rep(t,1,T,1){
-        rep(p,1,N,1){
+        rep(p,1,N,1){   
             uniform_real_distribution<double> dis(0.0,1.0);
             vector<double> r1(n+1), r2(n+1);
             vector<double> diffPb=calSame(P[p],Pb[p]);
@@ -392,7 +389,7 @@ void NPSO(){
             rep(i,1,n,1)
                 if (!dd[i]){
                     double prob=1.0/(1.0+exp(-V[p][i]));
-                    double randProb=dis(gen);
+                    double randProb=dis(gen);   
                     if (randProb<prob){
                         double sumr1r2=r1[i]+r2[i];
                         uniform_real_distribution<double> disp(0.0,sumr1r2);
@@ -424,6 +421,7 @@ void NPSO(){
             caldklk(P[p],dk[p],lk[p]);
             
             localSearch(P[p],dk[p],lk[p]);
+            caldklk(P[p],dk[p],lk[p]);
             Q[p]=modularity(dk[p],lk[p]);
         }
 
@@ -441,9 +439,8 @@ void NPSO(){
                 }
             }
         }
+        cout<<"Iteration "<<t<<": Best Modularity = "<<Qg<<"\n";
 
-
-        cout<<"Iteration "<<t<<": "<<Qg<<" "<<N<<" "<<V[1][1]<<" "<<V[1][10]<<" "<<V[3][1]<<" "<<V[3][10]<<"\n";
     }
 
     // build dk, lk for Pb and Pg before final merging 
@@ -462,29 +459,19 @@ void NPSO(){
     #pragma omp parallel for schedule(dynamic)
     rep(i,1,N,1){
         SecondaryCommunityConsolidation(P[i], dk[i], lk[i]);
-        
         caldklk(P[i], dk[i], lk[i]);
         Q[i] = modularity(dk[i], lk[i]);
         
-        #pragma omp critical
-        {
-            cout<<"Final merge individual "<<i<<": "<<Q[i]<<"\n";
-        }
 
         SecondaryCommunityConsolidation(Pb[i], dkPb[i], lkPb[i]);
         caldklk(Pb[i], dkPb[i], lkPb[i]);
         Qb[i] = modularity(dkPb[i], lkPb[i]);
-        
-        #pragma omp critical
-        {
-            cout<<"Final merge individual "<<i<<": "<<Qb[i]<<"\n";
-        }
+       
     }
 
     SecondaryCommunityConsolidation(Pg, dkPg, lkPg);
     caldklk(Pg, dkPg, lkPg);
     Qg = modularity(dkPg, lkPg);
-    cout<<"Final merge global best: "<<Qg<<"\n";
 
     double ans=Qg;
     rep(i,1,N,1){
@@ -492,14 +479,14 @@ void NPSO(){
         ans=max(ans,Qb[i]);
     }
 
-    cout<<"modularity best:"<<ans<<"\n";
+    cout<<ans<<"\n";
 }
 
 int main(){
     // fastIO
     clock_t tStart = clock();
     
-    freopen("/home/vhaohao/hao/nckh/dataset-community/Netscience.txt","r",stdin);
+    freopen("/home/vhaohao/Downloads/power-US-Grid/power-US-Grid.mtx","r",stdin);
     // freopen("output.txt","w",stdout);
 
     cin>>n>>m;
@@ -526,6 +513,4 @@ int main(){
     }
 
     NPSO();
-        
-    printf("\nTime taken: %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 }
