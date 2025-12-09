@@ -373,8 +373,12 @@ void NPSO(){
         rep(p,1,N,1){   
             uniform_real_distribution<double> dis(0.0,1.0);
             vector<double> r1(n+1), r2(n+1);
-            vector<double> diffPb=calSame(P[p],Pb[p]);
+            vector<double> diffPb= calSame(P[p],Pb[p]);
             vector<double> diffPg=calSame(P[p],Pg);
+
+            rep(i,1,n,1)
+                diffPb[i]=1.0 - diffPb[i],diffPg[i]=1.0 - diffPg[i];
+                
             rep(i,1,n,1){
                 r1[i]=dis(gen);
                 r2[i]=dis(gen);
