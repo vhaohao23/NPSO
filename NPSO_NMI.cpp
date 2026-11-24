@@ -9,7 +9,7 @@ using namespace std;
 random_device rd;   
 mt19937 gen(rd());
 
-int N=100;
+int N=1;
 const double c1=1,c2=1;
 double w=1.01;
 
@@ -508,6 +508,7 @@ void NPSO(){
     double disw=para_disw*double(T);
     int cntStable=0;
     rep(t,1,T,1){
+        cout<<"Generation "<<t<<": w="<<w<<"\n";
         rep(p,1,N,1){
             uniform_real_distribution<double> dis(0.0,1.0);
             vector<double> r1(n+1), r2(n+1);
@@ -654,7 +655,7 @@ int main(){
     // fastIO
     clock_t tStart = clock();
     
-    freopen("/home/vhaohao/hao/nckh/dataset-community/polbooks.txt","r",stdin);
+    freopen("/home/vhaohao/hao/nckh/dataset-community/GN/GN-0.85/network.dat","r",stdin);
     // freopen("output.txt","w",stdout);
 
     cin>>n>>m;
@@ -675,14 +676,14 @@ int main(){
     int u,v;
     rep(i,1,m,1){
         cin>>u>>v;
-        // u++; v++;
+        u++; v++;
         E[u].push_back(v);
         E[v].push_back(u);
         k[u]++,k[v]++;
     }
 
     {
-    std::string path = "/home/vhaohao/Downloads/real-world networks with lable-20251125T082334Z-1-001/real-world networks with lable/polbooks/community.dat";
+    std::string path = "/home/vhaohao/hao/nckh/dataset-community/GN/GN-0.85/community.dat";
     std::ifstream fin(path);
     if (!fin.is_open()){
         perror(path.c_str());

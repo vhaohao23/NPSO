@@ -367,7 +367,7 @@ void NPSO(){
     //     cout<<Pg[i]<<" ";
     double muProb=0.15; // mutation probability
 
-    double disw=1.1;
+    double disw=0.1;
 
     rep(t,1,T,1){
         rep(p,1,N,1){   
@@ -385,6 +385,7 @@ void NPSO(){
                 if (V[p][i]>0) w=1-disw;
                 else w=1+disw;
                 V[p][i]=w*V[p][i]+c1*r1[i]*diffPb[i]+c2*r2[i]*diffPg[i];
+                // cout<<w<<"V:"<<V[p][i]<<"\n";
             }
             vector<bool> dd(n+1,0);
 
@@ -454,7 +455,8 @@ void NPSO(){
         caldklk(Pb[i], dkPb[i], lkPb[i]);
         Qb[i] = modularity(dkPb[i], lkPb[i]);
     }
-
+    cout<<"After final local search, best modularity = "<<Qg<<"\n";
+    // printf("After final local search, best modularity = %.6f\n", Qg);
     // global best dk/lk
     vector<long long> dkPg(n+1, 0), lkPg(n+1, 0);
     caldklk(Pg, dkPg, lkPg);
@@ -466,16 +468,26 @@ void NPSO(){
         caldklk(P[i], dk[i], lk[i]);
         Q[i] = modularity(dk[i], lk[i]);
         
+        #pragma omp critical
+        {
+            cout<<"Final merge individual "<<i<<": "<<Q[i]<<"\n";
+        }
 
         SecondaryCommunityConsolidation(Pb[i], dkPb[i], lkPb[i]);
         caldklk(Pb[i], dkPb[i], lkPb[i]);
         Qb[i] = modularity(dkPb[i], lkPb[i]);
+
+        #pragma omp critical
+        {
+            cout<<"Final merge individual "<<i<<": "<<Qb[i]<<"\n";
+        }
        
     }
 
     SecondaryCommunityConsolidation(Pg, dkPg, lkPg);
     caldklk(Pg, dkPg, lkPg);
     Qg = modularity(dkPg, lkPg);
+    cout<<"Final merge global best: "<<Qg<<"\n";
 
     double ans=Qg;
     rep(i,1,N,1){
@@ -490,7 +502,7 @@ int main(){
     // fastIO
     clock_t tStart = clock();
     
-    freopen("/home/vhaohao/Downloads/power-US-Grid/power-US-Grid.mtx","r",stdin);
+    freopen("/home/vhaohao/hao/nckh/dataset-community/power.txt","r",stdin);
     // freopen("output.txt","w",stdout);
 
     cin>>n>>m;
@@ -517,4 +529,5 @@ int main(){
     }
 
     NPSO();
+    // printf("Time taken: %.10fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 }
