@@ -10,7 +10,7 @@ mt19937 gen(rd());
 
 int N=100;
 const double c1=1,c2=1;
-double w=1.01;
+double w=1.1;
 
 int T=100;
 const double para_disw=1.0/400.0;
@@ -502,7 +502,7 @@ int main(){
     // fastIO
     clock_t tStart = clock();
     
-    freopen("/home/vhaohao/hao/nckh/dataset-community/power.txt","r",stdin);
+    freopen("/home/vhaohao/hao/nckh/dataset-community/Netscience.txt","r",stdin);
     // freopen("output.txt","w",stdout);
 
     cin>>n>>m;

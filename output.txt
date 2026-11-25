@@ -1,1 +1,1147 @@
-0.908474
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Final NMI: 0.947935
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Final NMI: 0.949204
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Generation 9: w=1.01
+Generation 10: w=1.01
+Final NMI: 0.958027
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Final NMI: 0.944502
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Generation 9: w=1.01
+Generation 10: w=1.01
+Generation 11: w=1.01
+Final NMI: 0.951704
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Final NMI: 0.956138
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Final NMI: 0.953609
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Generation 9: w=1.01
+Generation 10: w=1.01
+Generation 11: w=1.01
+Generation 12: w=1.01
+Generation 13: w=1.01
+Final NMI: 0.952092
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Final NMI: 0.956079
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Final NMI: 0.955463
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Final NMI: 0.949182
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Generation 9: w=1.01
+Generation 10: w=1.01
+Final NMI: 0.946776
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Final NMI: 0.955416
+Generation 1: w=1.01
+Generation 2: w=1.01
+Generation 3: w=1.01
+Generation 4: w=1.01
+Generation 5: w=1.01
+Generation 6: w=1.01
+Generation 7: w=1.01
+Generation 8: w=1.01
+Generation 9: w=1.01
+Generation 10: w=1.01
+Generation 11: w=1.01
+Generation 12: w=1.01
+Final NMI: 0.951486
+Generation 1: w=1.1
+Iteration 1: 0.596302 1
+Generation 2: w=1.1
+Iteration 2: 0.603775 2
+Generation 3: w=1.1
+Iteration 3: 0.605311 3
+Generation 4: w=0.9
+Iteration 4: 0.605311 4
+Generation 5: w=0.9
+Iteration 5: 0.605311 5
+Generation 6: w=0.9
+Iteration 6: 0.605311 6
+Generation 7: w=0.9
+Iteration 7: 0.605311 7
+Generation 8: w=0.9
+Iteration 8: 0.605311 8
+Generation 9: w=0.9
+Iteration 9: 0.605311 9
+Generation 10: w=0.9
+Iteration 10: 0.605311 10
+Generation 11: w=0.9
+Iteration 11: 0.605311 11
+Generation 12: w=0.9
+Iteration 12: 0.605311 12
+Generation 13: w=0.9
+Iteration 13: 0.605311 13
+Generation 14: w=0.9
+Iteration 14: 0.605311 14
+Generation 15: w=0.9
+Iteration 15: 0.605311 15
+Generation 16: w=0.9
+Iteration 16: 0.605311 16
+Generation 17: w=0.9
+Iteration 17: 0.605311 17
+Generation 18: w=0.9
+Iteration 18: 0.605311 18
+Generation 19: w=0.9
+Iteration 19: 0.605311 19
+Generation 20: w=0.9
+Iteration 20: 0.605311 20
+Generation 21: w=0.9
+Iteration 21: 0.605311 21
+Generation 22: w=0.9
+Iteration 22: 0.605311 22
+Generation 23: w=0.9
+Iteration 23: 0.605311 23
+Generation 24: w=0.9
+Iteration 24: 0.605311 24
+Generation 25: w=0.9
+Iteration 25: 0.605311 25
+Generation 26: w=0.9
+Iteration 26: 0.605311 26
+Generation 27: w=0.9
+Iteration 27: 0.605311 27
+Generation 28: w=0.9
+Iteration 28: 0.605311 28
+Generation 29: w=0.9
+Iteration 29: 0.605311 29
+Generation 30: w=0.9
+Iteration 30: 0.605311 30
+Generation 31: w=0.9
+Iteration 31: 0.605311 31
+Generation 32: w=0.9
+Iteration 32: 0.605311 32
+Generation 33: w=0.9
+Iteration 33: 0.605311 33
+Generation 34: w=0.9
+Iteration 34: 0.605311 34
+Generation 35: w=0.9
+Iteration 35: 0.605311 35
+Generation 36: w=0.9
+Iteration 36: 0.605311 36
+Generation 37: w=0.9
+Iteration 37: 0.605311 37
+Generation 38: w=0.9
+Iteration 38: 0.605311 38
+Generation 39: w=0.9
+Iteration 39: 0.605311 39
+Generation 40: w=0.9
+Iteration 40: 0.605311 40
+Generation 41: w=0.9
+Iteration 41: 0.605311 41
+Generation 42: w=0.9
+Iteration 42: 0.605311 42
+Generation 43: w=0.9
+Iteration 43: 0.605311 43
+Generation 44: w=0.9
+Iteration 44: 0.605311 44
+Generation 45: w=0.9
+Iteration 45: 0.605311 45
+Generation 46: w=0.9
+Iteration 46: 0.605311 46
+Generation 47: w=0.9
+Iteration 47: 0.605311 47
+Generation 48: w=0.9
+Iteration 48: 0.605311 48
+Generation 49: w=0.9
+Iteration 49: 0.605311 49
+Generation 50: w=0.9
+Iteration 50: 0.605311 50
+Generation 51: w=0.9
+Iteration 51: 0.605311 51
+Generation 52: w=0.9
+Iteration 52: 0.605311 52
+Generation 53: w=0.9
+Iteration 53: 0.605311 53
+Generation 54: w=0.9
+Iteration 54: 0.605311 54
+Generation 55: w=0.9
+Iteration 55: 0.605311 55
+Generation 56: w=0.9
+Iteration 56: 0.605311 56
+Generation 57: w=0.9
+Iteration 57: 0.605311 57
+Generation 58: w=0.9
+Iteration 58: 0.605311 58
+Generation 59: w=0.9
+Iteration 59: 0.605311 59
+Generation 60: w=0.9
+Iteration 60: 0.605311 60
+Generation 61: w=0.9
+Iteration 61: 0.605311 61
+Generation 62: w=0.9
+Iteration 62: 0.605311 62
+Generation 63: w=0.9
+Iteration 63: 0.605311 63
+Generation 64: w=0.9
+Iteration 64: 0.605311 64
+Generation 65: w=0.9
+Iteration 65: 0.605311 65
+Generation 66: w=0.9
+Iteration 66: 0.605311 66
+Generation 67: w=0.9
+Iteration 67: 0.605311 67
+Generation 68: w=0.9
+Iteration 68: 0.605311 68
+Generation 69: w=0.9
+Iteration 69: 0.605311 69
+Generation 70: w=0.9
+Iteration 70: 0.605311 70
+Generation 71: w=0.9
+Iteration 71: 0.605311 71
+Generation 72: w=0.9
+Iteration 72: 0.605311 72
+Generation 73: w=0.9
+Iteration 73: 0.605311 73
+Generation 74: w=0.9
+Iteration 74: 0.605311 74
+Generation 75: w=0.9
+Iteration 75: 0.605311 75
+Generation 76: w=0.9
+Iteration 76: 0.605311 76
+Generation 77: w=0.9
+Iteration 77: 0.605311 77
+Generation 78: w=0.9
+Iteration 78: 0.605311 78
+Generation 79: w=0.9
+Iteration 79: 0.605311 79
+Generation 80: w=0.9
+Iteration 80: 0.605311 80
+Generation 81: w=0.9
+Iteration 81: 0.605311 81
+Generation 82: w=0.9
+Iteration 82: 0.605311 82
+Generation 83: w=0.9
+Iteration 83: 0.605311 83
+Generation 84: w=0.9
+Iteration 84: 0.605311 84
+Generation 85: w=0.9
+Iteration 85: 0.605311 85
+Generation 86: w=0.9
+Iteration 86: 0.605311 86
+Generation 87: w=0.9
+Iteration 87: 0.605311 87
+Generation 88: w=0.9
+Iteration 88: 0.605311 88
+Generation 89: w=0.9
+Iteration 89: 0.605311 89
+Generation 90: w=0.9
+Iteration 90: 0.605311 90
+Generation 91: w=0.9
+Iteration 91: 0.605311 91
+Generation 92: w=0.9
+Iteration 92: 0.605311 92
+Generation 93: w=0.9
+Iteration 93: 0.605311 93
+Generation 94: w=0.9
+Iteration 94: 0.605311 94
+Generation 95: w=0.9
+Iteration 95: 0.605311 95
+Generation 96: w=0.9
+Iteration 96: 0.605311 96
+Generation 97: w=0.9
+Iteration 97: 0.605311 97
+Generation 98: w=0.9
+Iteration 98: 0.605311 98
+Generation 99: w=0.9
+Iteration 99: 0.605311 99
+Generation 100: w=0.9
+Iteration 100: 0.605311 100
+Final NMI: 0.950858
+Generation 1: w=1.1
+Iteration 1: 0.598951 1
+Generation 2: w=1.1
+Iteration 2: 0.608516 2
+Generation 3: w=1.1
+Iteration 3: 0.610508 3
+Generation 4: w=1.1
+Iteration 4: 0.610725 4
+Generation 5: w=0.9
+Iteration 5: 0.611836 5
+Generation 6: w=0.9
+Iteration 6: 0.61235 6
+Generation 7: w=0.9
+Iteration 7: 0.612938 7
+Generation 8: w=0.9
+Iteration 8: 0.612938 8
+Generation 9: w=0.9
+Iteration 9: 0.612938 9
+Generation 10: w=0.9
+Iteration 10: 0.612938 10
+Generation 11: w=0.9
+Iteration 11: 0.612938 11
+Generation 12: w=0.9
+Iteration 12: 0.612938 12
+Generation 13: w=0.9
+Iteration 13: 0.612938 13
+Generation 14: w=0.9
+Iteration 14: 0.612938 14
+Generation 15: w=0.9
+Iteration 15: 0.612938 15
+Generation 16: w=0.9
+Iteration 16: 0.612938 16
+Generation 17: w=0.9
+Iteration 17: 0.612938 17
+Generation 18: w=0.9
+Iteration 18: 0.612938 18
+Generation 19: w=0.9
+Iteration 19: 0.612938 19
+Generation 20: w=0.9
+Iteration 20: 0.612938 20
+Generation 21: w=0.9
+Iteration 21: 0.612938 21
+Generation 22: w=0.9
+Iteration 22: 0.612938 22
+Generation 23: w=0.9
+Iteration 23: 0.612938 23
+Generation 24: w=0.9
+Iteration 24: 0.612938 24
+Generation 25: w=0.9
+Iteration 25: 0.612938 25
+Generation 26: w=0.9
+Iteration 26: 0.612938 26
+Generation 27: w=0.9
+Iteration 27: 0.612938 27
+Generation 28: w=0.9
+Iteration 28: 0.612938 28
+Generation 29: w=0.9
+Iteration 29: 0.612938 29
+Generation 30: w=0.9
+Iteration 30: 0.612938 30
+Generation 31: w=0.9
+Iteration 31: 0.612938 31
+Generation 32: w=0.9
+Iteration 32: 0.612938 32
+Generation 33: w=0.9
+Iteration 33: 0.612938 33
+Generation 34: w=0.9
+Iteration 34: 0.612938 34
+Generation 35: w=0.9
+Iteration 35: 0.612938 35
+Generation 36: w=0.9
+Iteration 36: 0.612938 36
+Generation 37: w=0.9
+Iteration 37: 0.612938 37
+Generation 38: w=0.9
+Iteration 38: 0.612938 38
+Generation 39: w=0.9
+Iteration 39: 0.612938 39
+Generation 40: w=0.9
+Iteration 40: 0.612938 40
+Generation 41: w=0.9
+Iteration 41: 0.612938 41
+Generation 42: w=0.9
+Iteration 42: 0.612938 42
+Generation 43: w=0.9
+Iteration 43: 0.612938 43
+Generation 44: w=0.9
+Iteration 44: 0.612938 44
+Generation 45: w=0.9
+Iteration 45: 0.612938 45
+Generation 46: w=0.9
+Iteration 46: 0.612938 46
+Generation 47: w=0.9
+Iteration 47: 0.612938 47
+Generation 48: w=0.9
+Iteration 48: 0.612938 48
+Generation 49: w=0.9
+Iteration 49: 0.612938 49
+Generation 50: w=0.9
+Iteration 50: 0.612938 50
+Generation 51: w=0.9
+Iteration 51: 0.612938 51
+Generation 52: w=0.9
+Iteration 52: 0.612938 52
+Generation 53: w=0.9
+Iteration 53: 0.612938 53
+Generation 54: w=0.9
+Iteration 54: 0.612938 54
+Generation 55: w=0.9
+Iteration 55: 0.612938 55
+Generation 56: w=0.9
+Iteration 56: 0.612938 56
+Generation 57: w=0.9
+Iteration 57: 0.612938 57
+Generation 58: w=0.9
+Iteration 58: 0.612938 58
+Generation 59: w=0.9
+Iteration 59: 0.612938 59
+Generation 60: w=0.9
+Iteration 60: 0.612938 60
+Generation 61: w=0.9
+Iteration 61: 0.612938 61
+Generation 62: w=0.9
+Iteration 62: 0.612938 62
+Generation 63: w=0.9
+Iteration 63: 0.612938 63
+Generation 64: w=0.9
+Iteration 64: 0.612938 64
+Generation 65: w=0.9
+Iteration 65: 0.612938 65
+Generation 66: w=0.9
+Iteration 66: 0.612938 66
+Generation 67: w=0.9
+Iteration 67: 0.612938 67
+Generation 68: w=0.9
+Iteration 68: 0.612938 68
+Generation 69: w=0.9
+Iteration 69: 0.612938 69
+Generation 70: w=0.9
+Iteration 70: 0.612938 70
+Generation 71: w=0.9
+Iteration 71: 0.612938 71
+Generation 72: w=0.9
+Iteration 72: 0.612938 72
+Generation 73: w=0.9
+Iteration 73: 0.612938 73
+Generation 74: w=0.9
+Iteration 74: 0.612938 74
+Generation 75: w=0.9
+Iteration 75: 0.612938 75
+Generation 76: w=0.9
+Iteration 76: 0.612938 76
+Generation 77: w=0.9
+Iteration 77: 0.612938 77
+Generation 78: w=0.9
+Iteration 78: 0.612938 78
+Generation 79: w=0.9
+Iteration 79: 0.612938 79
+Generation 80: w=0.9
+Iteration 80: 0.612938 80
+Generation 81: w=0.9
+Iteration 81: 0.612938 81
+Generation 82: w=0.9
+Iteration 82: 0.612938 82
+Generation 83: w=0.9
+Iteration 83: 0.612938 83
+Generation 84: w=0.9
+Iteration 84: 0.612938 84
+Generation 85: w=0.9
+Iteration 85: 0.612938 85
+Generation 86: w=0.9
+Iteration 86: 0.612938 86
+Generation 87: w=0.9
+Iteration 87: 0.612938 87
+Generation 88: w=0.9
+Iteration 88: 0.612938 88
+Generation 89: w=0.9
+Iteration 89: 0.612938 89
+Generation 90: w=0.9
+Iteration 90: 0.612938 90
+Generation 91: w=0.9
+Iteration 91: 0.612938 91
+Generation 92: w=0.9
+Iteration 92: 0.612938 92
+Generation 93: w=0.9
+Iteration 93: 0.612938 93
+Generation 94: w=0.9
+Iteration 94: 0.612938 94
+Generation 95: w=0.9
+Iteration 95: 0.612938 95
+Generation 96: w=0.9
+Iteration 96: 0.612938 96
+Generation 97: w=0.9
+Iteration 97: 0.612938 97
+Generation 98: w=0.9
+Iteration 98: 0.612938 98
+Generation 99: w=0.9
+Iteration 99: 0.612938 99
+Generation 100: w=0.9
+Iteration 100: 0.612938 100
+Final NMI: 0.949755
+Generation 1: w=1.1
+Iteration 1: 0.597199 1
+Generation 2: w=1.1
+Iteration 2: 0.604863 2
+Generation 3: w=1.1
+Iteration 3: 0.606929 3
+Generation 4: w=0.9
+Iteration 4: 0.606929 4
+Generation 5: w=0.9
+Iteration 5: 0.606929 5
+Generation 6: w=0.9
+Iteration 6: 0.606929 6
+Generation 7: w=0.9
+Iteration 7: 0.606929 7
+Generation 8: w=0.9
+Iteration 8: 0.606929 8
+Generation 9: w=0.9
+Iteration 9: 0.606929 9
+Generation 10: w=0.9
+Iteration 10: 0.606929 10
+Generation 11: w=0.9
+Iteration 11: 0.606929 11
+Generation 12: w=0.9
+Iteration 12: 0.606929 12
+Generation 13: w=0.9
+Iteration 13: 0.606929 13
+Generation 14: w=0.9
+Iteration 14: 0.606929 14
+Generation 15: w=0.9
+Iteration 15: 0.606929 15
+Generation 16: w=0.9
+Iteration 16: 0.606929 16
+Generation 17: w=0.9
+Iteration 17: 0.606929 17
+Generation 18: w=0.9
+Iteration 18: 0.606929 18
+Generation 19: w=0.9
+Iteration 19: 0.606929 19
+Generation 20: w=0.9
+Iteration 20: 0.606929 20
+Generation 21: w=0.9
+Iteration 21: 0.606929 21
+Generation 22: w=0.9
+Iteration 22: 0.606929 22
+Generation 23: w=0.9
+Iteration 23: 0.606929 23
+Generation 24: w=0.9
+Iteration 24: 0.606929 24
+Generation 25: w=0.9
+Iteration 25: 0.606929 25
+Generation 26: w=0.9
+Iteration 26: 0.606929 26
+Generation 27: w=0.9
+Iteration 27: 0.606929 27
+Generation 28: w=0.9
+Iteration 28: 0.606929 28
+Generation 29: w=0.9
+Iteration 29: 0.606929 29
+Generation 30: w=0.9
+Iteration 30: 0.606929 30
+Generation 31: w=0.9
+Iteration 31: 0.606929 31
+Generation 32: w=0.9
+Iteration 32: 0.606929 32
+Generation 33: w=0.9
+Iteration 33: 0.606929 33
+Generation 34: w=0.9
+Iteration 34: 0.606929 34
+Generation 35: w=0.9
+Iteration 35: 0.606929 35
+Generation 36: w=0.9
+Iteration 36: 0.606929 36
+Generation 37: w=0.9
+Iteration 37: 0.606929 37
+Generation 38: w=0.9
+Iteration 38: 0.606929 38
+Generation 39: w=0.9
+Iteration 39: 0.606929 39
+Generation 40: w=0.9
+Iteration 40: 0.606929 40
+Generation 41: w=0.9
+Iteration 41: 0.606929 41
+Generation 42: w=0.9
+Iteration 42: 0.606929 42
+Generation 43: w=0.9
+Iteration 43: 0.606929 43
+Generation 44: w=0.9
+Iteration 44: 0.606929 44
+Generation 45: w=0.9
+Iteration 45: 0.606929 45
+Generation 46: w=0.9
+Iteration 46: 0.606929 46
+Generation 47: w=0.9
+Iteration 47: 0.606929 47
+Generation 48: w=0.9
+Iteration 48: 0.606929 48
+Generation 49: w=0.9
+Iteration 49: 0.606929 49
+Generation 50: w=0.9
+Iteration 50: 0.606929 50
+Generation 51: w=0.9
+Iteration 51: 0.606929 51
+Generation 52: w=0.9
+Iteration 52: 0.606929 52
+Generation 53: w=0.9
+Iteration 53: 0.606929 53
+Generation 54: w=0.9
+Iteration 54: 0.606929 54
+Generation 55: w=0.9
+Iteration 55: 0.606929 55
+Generation 56: w=0.9
+Iteration 56: 0.606929 56
+Generation 57: w=0.9
+Iteration 57: 0.606929 57
+Generation 58: w=0.9
+Iteration 58: 0.606929 58
+Generation 59: w=0.9
+Iteration 59: 0.606929 59
+Generation 60: w=0.9
+Iteration 60: 0.606929 60
+Generation 61: w=0.9
+Iteration 61: 0.606929 61
+Generation 62: w=0.9
+Iteration 62: 0.606929 62
+Generation 63: w=0.9
+Iteration 63: 0.606929 63
+Generation 64: w=0.9
+Iteration 64: 0.606929 64
+Generation 65: w=0.9
+Iteration 65: 0.606929 65
+Generation 66: w=0.9
+Iteration 66: 0.606929 66
+Generation 67: w=0.9
+Iteration 67: 0.606929 67
+Generation 68: w=0.9
+Iteration 68: 0.606929 68
+Generation 69: w=0.9
+Iteration 69: 0.606929 69
+Generation 70: w=0.9
+Iteration 70: 0.606929 70
+Generation 71: w=0.9
+Iteration 71: 0.606929 71
+Generation 72: w=0.9
+Iteration 72: 0.606929 72
+Generation 73: w=0.9
+Iteration 73: 0.606929 73
+Generation 74: w=0.9
+Iteration 74: 0.606929 74
+Generation 75: w=0.9
+Iteration 75: 0.606929 75
+Generation 76: w=0.9
+Iteration 76: 0.606929 76
+Generation 77: w=0.9
+Iteration 77: 0.606929 77
+Generation 78: w=0.9
+Iteration 78: 0.606929 78
+Generation 79: w=0.9
+Iteration 79: 0.606929 79
+Generation 80: w=0.9
+Iteration 80: 0.606929 80
+Generation 81: w=0.9
+Iteration 81: 0.606929 81
+Generation 82: w=0.9
+Iteration 82: 0.606929 82
+Generation 83: w=0.9
+Iteration 83: 0.606929 83
+Generation 84: w=0.9
+Iteration 84: 0.606929 84
+Generation 85: w=0.9
+Iteration 85: 0.606929 85
+Generation 86: w=0.9
+Iteration 86: 0.606929 86
+Generation 87: w=0.9
+Iteration 87: 0.606929 87
+Generation 88: w=0.9
+Iteration 88: 0.606929 88
+Generation 89: w=0.9
+Iteration 89: 0.606929 89
+Generation 90: w=0.9
+Iteration 90: 0.606929 90
+Generation 91: w=0.9
+Iteration 91: 0.606929 91
+Generation 92: w=0.9
+Iteration 92: 0.606929 92
+Generation 93: w=0.9
+Iteration 93: 0.606929 93
+Generation 94: w=0.9
+Iteration 94: 0.606929 94
+Generation 95: w=0.9
+Iteration 95: 0.606929 95
+Generation 96: w=0.9
+Iteration 96: 0.606929 96
+Generation 97: w=0.9
+Iteration 97: 0.606929 97
+Generation 98: w=0.9
+Iteration 98: 0.606929 98
+Generation 99: w=0.9
+Iteration 99: 0.606929 99
+Generation 100: w=0.9
+Iteration 100: 0.606929 100
+Final NMI: 0.956079
+Generation 1: w=1.1
+Iteration 1: 0.597963 1
+Generation 2: w=1.1
+Iteration 2: 0.607979 2
+Generation 3: w=1.1
+Iteration 3: 0.6099 3
+Generation 4: w=1.1
+Iteration 4: 0.6099 4
+Generation 5: w=0.9
+Iteration 5: 0.6099 5
+Generation 6: w=0.9
+Iteration 6: 0.6099 6
+Generation 7: w=0.9
+Iteration 7: 0.6099 7
+Generation 8: w=0.9
+Iteration 8: 0.6099 8
+Generation 9: w=0.9
+Iteration 9: 0.6099 9
+Generation 10: w=0.9
+Iteration 10: 0.6099 10
+Generation 11: w=0.9
+Iteration 11: 0.6099 11
+Generation 12: w=0.9
+Iteration 12: 0.6099 12
+Generation 13: w=0.9
+Iteration 13: 0.6099 13
+Generation 14: w=0.9
+Iteration 14: 0.6099 14
+Generation 15: w=0.9
+Iteration 15: 0.6099 15
+Generation 16: w=0.9
+Iteration 16: 0.6099 16
+Generation 17: w=0.9
+Iteration 17: 0.6099 17
+Generation 18: w=0.9
+Iteration 18: 0.6099 18
+Generation 19: w=0.9
+Iteration 19: 0.6099 19
+Generation 20: w=0.9
+Iteration 20: 0.6099 20
+Generation 21: w=0.9
+Iteration 21: 0.6099 21
+Generation 22: w=0.9
+Iteration 22: 0.6099 22
+Generation 23: w=0.9
+Iteration 23: 0.6099 23
+Generation 24: w=0.9
+Iteration 24: 0.6099 24
+Generation 25: w=0.9
+Iteration 25: 0.6099 25
+Generation 26: w=0.9
+Iteration 26: 0.6099 26
+Generation 27: w=0.9
+Iteration 27: 0.6099 27
+Generation 28: w=0.9
+Iteration 28: 0.6099 28
+Generation 29: w=0.9
+Iteration 29: 0.6099 29
+Generation 30: w=0.9
+Iteration 30: 0.6099 30
+Generation 31: w=0.9
+Iteration 31: 0.6099 31
+Generation 32: w=0.9
+Iteration 32: 0.6099 32
+Generation 33: w=0.9
+Iteration 33: 0.6099 33
+Generation 34: w=0.9
+Iteration 34: 0.6099 34
+Generation 35: w=0.9
+Iteration 35: 0.6099 35
+Generation 36: w=0.9
+Iteration 36: 0.6099 36
+Generation 37: w=0.9
+Iteration 37: 0.6099 37
+Generation 38: w=0.9
+Iteration 38: 0.6099 38
+Generation 39: w=0.9
+Iteration 39: 0.6099 39
+Generation 40: w=0.9
+Iteration 40: 0.6099 40
+Generation 41: w=0.9
+Iteration 41: 0.6099 41
+Generation 42: w=0.9
+Iteration 42: 0.6099 42
+Generation 43: w=0.9
+Iteration 43: 0.6099 43
+Generation 44: w=0.9
+Iteration 44: 0.6099 44
+Generation 45: w=0.9
+Iteration 45: 0.6099 45
+Generation 46: w=0.9
+Iteration 46: 0.6099 46
+Generation 47: w=0.9
+Iteration 47: 0.6099 47
+Generation 48: w=0.9
+Iteration 48: 0.6099 48
+Generation 49: w=0.9
+Iteration 49: 0.6099 49
+Generation 50: w=0.9
+Iteration 50: 0.6099 50
+Generation 51: w=0.9
+Iteration 51: 0.6099 51
+Generation 52: w=0.9
+Iteration 52: 0.6099 52
+Generation 53: w=0.9
+Iteration 53: 0.6099 53
+Generation 54: w=0.9
+Iteration 54: 0.6099 54
+Generation 55: w=0.9
+Iteration 55: 0.6099 55
+Generation 56: w=0.9
+Iteration 56: 0.6099 56
+Generation 57: w=0.9
+Iteration 57: 0.6099 57
+Generation 58: w=0.9
+Iteration 58: 0.6099 58
+Generation 59: w=0.9
+Iteration 59: 0.6099 59
+Generation 60: w=0.9
+Iteration 60: 0.6099 60
+Generation 61: w=0.9
+Iteration 61: 0.6099 61
+Generation 62: w=0.9
+Iteration 62: 0.6099 62
+Generation 63: w=0.9
+Iteration 63: 0.6099 63
+Generation 64: w=0.9
+Iteration 64: 0.6099 64
+Generation 65: w=0.9
+Iteration 65: 0.6099 65
+Generation 66: w=0.9
+Iteration 66: 0.6099 66
+Generation 67: w=0.9
+Iteration 67: 0.6099 67
+Generation 68: w=0.9
+Iteration 68: 0.6099 68
+Generation 69: w=0.9
+Iteration 69: 0.6099 69
+Generation 70: w=0.9
+Iteration 70: 0.6099 70
+Generation 71: w=0.9
+Iteration 71: 0.6099 71
+Generation 72: w=0.9
+Iteration 72: 0.6099 72
+Generation 73: w=0.9
+Iteration 73: 0.6099 73
+Generation 74: w=0.9
+Iteration 74: 0.6099 74
+Generation 75: w=0.9
+Iteration 75: 0.6099 75
+Generation 76: w=0.9
+Iteration 76: 0.6099 76
+Generation 77: w=0.9
+Iteration 77: 0.6099 77
+Generation 78: w=0.9
+Iteration 78: 0.6099 78
+Generation 79: w=0.9
+Iteration 79: 0.6099 79
+Generation 80: w=0.9
+Iteration 80: 0.6099 80
+Generation 81: w=0.9
+Iteration 81: 0.6099 81
+Generation 82: w=0.9
+Iteration 82: 0.6099 82
+Generation 83: w=0.9
+Iteration 83: 0.6099 83
+Generation 84: w=0.9
+Iteration 84: 0.6099 84
+Generation 85: w=0.9
+Iteration 85: 0.6099 85
+Generation 86: w=0.9
+Iteration 86: 0.6099 86
+Generation 87: w=0.9
+Iteration 87: 0.6099 87
+Generation 88: w=0.9
+Iteration 88: 0.6099 88
+Generation 89: w=0.9
+Iteration 89: 0.6099 89
+Generation 90: w=0.9
+Iteration 90: 0.6099 90
+Generation 91: w=0.9
+Iteration 91: 0.6099 91
+Generation 92: w=0.9
+Iteration 92: 0.6099 92
+Generation 93: w=0.9
+Iteration 93: 0.6099 93
+Generation 94: w=0.9
+Iteration 94: 0.6099 94
+Generation 95: w=0.9
+Iteration 95: 0.6099 95
+Generation 96: w=0.9
+Iteration 96: 0.6099 96
+Generation 97: w=0.9
+Iteration 97: 0.6099 97
+Generation 98: w=0.9
+Iteration 98: 0.6099 98
+Generation 99: w=0.9
+Iteration 99: 0.6099 99
+Generation 100: w=0.9
+Iteration 100: 0.6099 100
+Final NMI: 0.95592
+Generation 1: w=1.1
+Iteration 1: 0.600675 1
+Generation 2: w=1.1
+Iteration 2: 0.612441 2
+Generation 3: w=0.9
+Iteration 3: 0.616028 3
+Generation 4: w=0.9
+Iteration 4: 0.61673 4
+Generation 5: w=0.9
+Iteration 5: 0.61673 5
+Generation 6: w=0.9
+Iteration 6: 0.61673 6
+Generation 7: w=0.9
+Iteration 7: 0.61673 7
+Generation 8: w=0.9
+Iteration 8: 0.61673 8
+Generation 9: w=0.9
+Iteration 9: 0.61673 9
+Generation 10: w=0.9
+Iteration 10: 0.61673 10
+Generation 11: w=0.9
+Iteration 11: 0.61673 11
+Generation 12: w=0.9
+Iteration 12: 0.61673 12
+Generation 13: w=0.9
+Iteration 13: 0.61673 13
+Generation 14: w=0.9
+Iteration 14: 0.61673 14
+Generation 15: w=0.9
+Iteration 15: 0.61673 15
+Generation 16: w=0.9
+Iteration 16: 0.61673 16
+Generation 17: w=0.9
+Iteration 17: 0.61673 17
+Generation 18: w=0.9
+Iteration 18: 0.61673 18
+Generation 19: w=0.9
+Iteration 19: 0.61673 19
+Generation 20: w=0.9
+Iteration 20: 0.61673 20
+Generation 21: w=0.9
+Iteration 21: 0.61673 21
+Generation 22: w=0.9
+Iteration 22: 0.61673 22
+Generation 23: w=0.9
+Iteration 23: 0.61673 23
+Generation 24: w=0.9
+Iteration 24: 0.61673 24
+Generation 25: w=0.9
+Iteration 25: 0.61673 25
+Generation 26: w=0.9
+Iteration 26: 0.61673 26
+Generation 27: w=0.9
+Iteration 27: 0.61673 27
+Generation 28: w=0.9
+Iteration 28: 0.61673 28
+Generation 29: w=0.9
+Iteration 29: 0.61673 29
+Generation 30: w=0.9
+Iteration 30: 0.61673 30
+Generation 31: w=0.9
+Iteration 31: 0.61673 31
+Generation 32: w=0.9
+Iteration 32: 0.61673 32
+Generation 33: w=0.9
+Iteration 33: 0.61673 33
+Generation 34: w=0.9
+Iteration 34: 0.61673 34
+Generation 35: w=0.9
+Iteration 35: 0.61673 35
+Generation 36: w=0.9
+Iteration 36: 0.61673 36
+Generation 37: w=0.9
+Iteration 37: 0.61673 37
+Generation 38: w=0.9
+Iteration 38: 0.61673 38
+Generation 39: w=0.9
+Iteration 39: 0.61673 39
+Generation 40: w=0.9
+Iteration 40: 0.61673 40
+Generation 41: w=0.9
+Iteration 41: 0.61673 41
+Generation 42: w=0.9
+Iteration 42: 0.61673 42
+Generation 43: w=0.9
+Iteration 43: 0.61673 43
+Generation 44: w=0.9
+Iteration 44: 0.61673 44
+Generation 45: w=0.9
+Iteration 45: 0.61673 45
+Generation 46: w=0.9
+Iteration 46: 0.61673 46
+Generation 47: w=0.9
+Iteration 47: 0.61673 47
+Generation 48: w=0.9
+Iteration 48: 0.61673 48
+Generation 49: w=0.9
+Iteration 49: 0.61673 49
+Generation 50: w=0.9
+Iteration 50: 0.61673 50
+Generation 51: w=0.9
+Iteration 51: 0.61673 51
+Generation 52: w=0.9
+Iteration 52: 0.61673 52
+Generation 53: w=0.9
+Iteration 53: 0.61673 53
+Generation 54: w=0.9
+Iteration 54: 0.61673 54
+Generation 55: w=0.9
+Iteration 55: 0.61673 55
+Generation 56: w=0.9
+Iteration 56: 0.61673 56
+Generation 57: w=0.9
+Iteration 57: 0.61673 57
+Generation 58: w=0.9
+Iteration 58: 0.61673 58
+Generation 59: w=0.9
+Iteration 59: 0.61673 59
+Generation 60: w=0.9
+Iteration 60: 0.61673 60
+Generation 61: w=0.9
+Iteration 61: 0.61673 61
+Generation 62: w=0.9
+Iteration 62: 0.61673 62
+Generation 63: w=0.9
+Iteration 63: 0.61673 63
+Generation 64: w=0.9
+Iteration 64: 0.61673 64
+Generation 65: w=0.9
+Iteration 65: 0.61673 65
+Generation 66: w=0.9
+Iteration 66: 0.61673 66
+Generation 67: w=0.9
+Iteration 67: 0.61673 67
+Generation 68: w=0.9
+Iteration 68: 0.61673 68
+Generation 69: w=0.9
+Iteration 69: 0.61673 69
+Generation 70: w=0.9
+Iteration 70: 0.61673 70
+Generation 71: w=0.9
+Iteration 71: 0.61673 71
+Generation 72: w=0.9
+Iteration 72: 0.61673 72
+Generation 73: w=0.9
+Iteration 73: 0.61673 73
+Generation 74: w=0.9
+Iteration 74: 0.61673 74
+Generation 75: w=0.9
+Iteration 75: 0.61673 75
+Generation 76: w=0.9
+Iteration 76: 0.61673 76
+Generation 77: w=0.9
+Iteration 77: 0.61673 77
+Generation 78: w=0.9
+Iteration 78: 0.61673 78
+Generation 79: w=0.9
+Iteration 79: 0.61673 79
+Generation 80: w=0.9
+Iteration 80: 0.61673 80
+Generation 81: w=0.9
+Iteration 81: 0.61673 81
+Generation 82: w=0.9
+Iteration 82: 0.61673 82
+Generation 83: w=0.9
+Iteration 83: 0.61673 83
+Generation 84: w=0.9
+Iteration 84: 0.61673 84
+Generation 85: w=0.9
+Iteration 85: 0.61673 85
+Generation 86: w=0.9
+Iteration 86: 0.61673 86
+Generation 87: w=0.9
+Iteration 87: 0.61673 87
+Generation 88: w=0.9
+Iteration 88: 0.61673 88
+Generation 89: w=0.9
+Iteration 89: 0.61673 89
+Generation 90: w=0.9
+Iteration 90: 0.61673 90
+Generation 91: w=0.9
+Iteration 91: 0.61673 91
+Generation 92: w=0.9
+Iteration 92: 0.61673 92
+Generation 93: w=0.9
+Iteration 93: 0.61673 93
+Generation 94: w=0.9
+Iteration 94: 0.61673 94
+Generation 95: w=0.9
+Iteration 95: 0.61673 95
+Generation 96: w=0.9
+Iteration 96: 0.61673 96
+Generation 97: w=0.9
+Iteration 97: 0.61673 97
+Generation 98: w=0.9
+Iteration 98: 0.61673 98
+Generation 99: w=0.9
+Iteration 99: 0.61673 99
+Generation 100: w=0.9
+Iteration 100: 0.61673 100
+Final NMI: 0.955133

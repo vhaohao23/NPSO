@@ -3,9 +3,9 @@
 
 int main() {
     freopen("output.txt", "w", stdout);
-    system("g++ -O3 -fopenmp -march=native npso_optimized.cpp -o npso_optimized");
+    system("g++ -O3 -fopenmp -march=native NPSO_NMI.cpp -o NPSO_NMI");
     for(int i = 1; i <= 30; i++) {
-        system("./npso_optimized");
+        system("./NPSO_NMI");
     }
     
     return 0;
